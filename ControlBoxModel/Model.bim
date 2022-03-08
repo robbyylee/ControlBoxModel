@@ -324,6 +324,165 @@
             "formatString": "0.00%;-0.00%;0.00%"
           }
         ]
+      },
+      {
+        "name": "tVOR_Forklift",
+        "columns": [
+          {
+            "name": "VOR_ID",
+            "dataType": "int64",
+            "sourceColumn": "VOR_ID"
+          },
+          {
+            "name": "Fleet",
+            "dataType": "string",
+            "sourceColumn": "Fleet"
+          },
+          {
+            "name": "Site",
+            "dataType": "string",
+            "sourceColumn": "Site"
+          },
+          {
+            "name": "VORStartDate",
+            "dataType": "dateTime",
+            "sourceColumn": "VORStartDate"
+          },
+          {
+            "name": "StartedBy",
+            "dataType": "string",
+            "sourceColumn": "StartedBy"
+          },
+          {
+            "name": "VOREndDate",
+            "dataType": "dateTime",
+            "sourceColumn": "VOREndDate"
+          },
+          {
+            "name": "ClosedBy",
+            "dataType": "string",
+            "sourceColumn": "ClosedBy"
+          },
+          {
+            "name": "StartComment",
+            "dataType": "string",
+            "sourceColumn": "StartComment"
+          },
+          {
+            "name": "EndComment",
+            "dataType": "string",
+            "sourceColumn": "EndComment"
+          },
+          {
+            "name": "tForkliftID",
+            "dataType": "int64",
+            "sourceColumn": "tForkliftID"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/PPDC1SQL01\\PartsPlus;TF_WebApp_PartsControlBox\",",
+                "    dbo_tVOR_Forklift = Source{[Schema=\"dbo\",Item=\"tVOR_Forklift\"]}[Data]",
+                "in",
+                "    dbo_tVOR_Forklift"
+              ]
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "VORForklifs",
+            "expression": " IF(CALCULATE(COUNTROWS(FILTER(tVOR_Forklift,tVOR_Forklift[VOREndDate]=BLANK())))=BLANK(),0,CALCULATE(COUNTROWS(FILTER(tVOR_Forklift,tVOR_Forklift[VOREndDate]=BLANK()))))"
+          },
+          {
+            "name": "VORFLPerc",
+            "expression": " IF(DIVIDE(CALCULATE(COUNTROWS(FILTER(tVOR_Forklift,tVOR_Forklift[VOREndDate]=blank()))),DISTINCTCOUNT(ForkliftStats[ForkliftID]))=0,0,DIVIDE(CALCULATE(COUNTROWS(FILTER(tVOR_Forklift,tVOR_Forklift[VOREndDate]=blank()))),DISTINCTCOUNT(ForkliftStats[ForkliftID])))",
+            "formatString": "0%;-0%;0%"
+          }
+        ]
+      },
+      {
+        "name": "tVOR_Vehicle",
+        "columns": [
+          {
+            "name": "VOR_ID",
+            "dataType": "int64",
+            "sourceColumn": "VOR_ID"
+          },
+          {
+            "name": "Registration",
+            "dataType": "string",
+            "sourceColumn": "Registration"
+          },
+          {
+            "name": "Site",
+            "dataType": "string",
+            "sourceColumn": "Site"
+          },
+          {
+            "name": "VORStartDate",
+            "dataType": "dateTime",
+            "sourceColumn": "VORStartDate"
+          },
+          {
+            "name": "StartedBy",
+            "dataType": "string",
+            "sourceColumn": "StartedBy"
+          },
+          {
+            "name": "VOREndDate",
+            "dataType": "dateTime",
+            "sourceColumn": "VOREndDate"
+          },
+          {
+            "name": "ClosedBy",
+            "dataType": "string",
+            "sourceColumn": "ClosedBy"
+          },
+          {
+            "name": "StartComment",
+            "dataType": "string",
+            "sourceColumn": "StartComment"
+          },
+          {
+            "name": "EndComment",
+            "dataType": "string",
+            "sourceColumn": "EndComment"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/PPDC1SQL01\\PartsPlus;TF_WebApp_PartsControlBox\",",
+                "    dbo_tVOR_Vehicle = Source{[Schema=\"dbo\",Item=\"tVOR_Vehicle\"]}[Data]",
+                "in",
+                "    dbo_tVOR_Vehicle"
+              ]
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "VORVehicles",
+            "expression": " CALCULATE(COUNTROWS(tVOR_Vehicle),FILTER(tVOR_Vehicle,tVOR_Vehicle[VOREndDate]=BLANK()))+0"
+          },
+          {
+            "name": "VORPerc",
+            "expression": " IF(DIVIDE(CALCULATE(COUNTROWS(tVOR_Vehicle),FILTER(tVOR_Vehicle,tVOR_Vehicle[VOREndDate] = BLANK())),DISTINCTCOUNT(VehicleStats[Registration]))=0,0,DIVIDE(CALCULATE(COUNTROWS(tVOR_Vehicle),FILTER(tVOR_Vehicle,tVOR_Vehicle[VOREndDate] = BLANK())),DISTINCTCOUNT(VehicleStats[Registration])))",
+            "formatString": "0%;-0%;0%"
+          }
+        ]
       }
     ],
     "annotations": [
