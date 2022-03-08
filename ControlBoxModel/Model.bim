@@ -45,6 +45,27 @@
           "Username": "partsplusuk\\robby.lee",
           "EncryptConnection": false
         }
+      },
+      {
+        "type": "structured",
+        "name": "SQL/PPDC1SQL01\\PartsPlus;PP_SurchargeMgmt",
+        "connectionDetails": {
+          "protocol": "tds",
+          "address": {
+            "server": "PPDC1SQL01\\PartsPlus",
+            "database": "PP_SurchargeMgmt"
+          },
+          "authentication": null,
+          "query": null
+        },
+        "options": {},
+        "credential": {
+          "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "ppdc1sql01\\partsplus;PP_SurchargeMgmt",
+          "Username": "partsplusuk\\robby.lee",
+          "EncryptConnection": false
+        }
       }
     ],
     "tables": [
@@ -1446,6 +1467,514 @@
                 "    #\"Changed Type\" = Table.TransformColumnTypes(dbo_tForkliftInspectionLog,{{\"Added\", type date}})",
                 "in",
                 "    #\"Changed Type\""
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "VI Dim Date",
+        "columns": [
+          {
+            "name": "TF_Date_ID",
+            "dataType": "int64",
+            "sourceColumn": "TF_Date_ID"
+          },
+          {
+            "name": "DayNum",
+            "dataType": "int64",
+            "sourceColumn": "DayNum"
+          },
+          {
+            "name": "WeekNum",
+            "dataType": "int64",
+            "sourceColumn": "WeekNum"
+          },
+          {
+            "name": "MonthNum",
+            "dataType": "int64",
+            "sourceColumn": "MonthNum"
+          },
+          {
+            "name": "QtrNum",
+            "dataType": "int64",
+            "sourceColumn": "QtrNum"
+          },
+          {
+            "name": "HalfYrNum",
+            "dataType": "int64",
+            "sourceColumn": "HalfYrNum"
+          },
+          {
+            "name": "WeekDayNum",
+            "dataType": "int64",
+            "sourceColumn": "WeekDayNum"
+          },
+          {
+            "name": "MonthDayNum",
+            "dataType": "int64",
+            "sourceColumn": "MonthDayNum"
+          },
+          {
+            "name": "QtrDayNum",
+            "dataType": "int64",
+            "sourceColumn": "QtrDayNum"
+          },
+          {
+            "name": "HalfYrDayNum",
+            "dataType": "int64",
+            "sourceColumn": "HalfYrDayNum"
+          },
+          {
+            "name": "IsWorkingDay_Eng",
+            "dataType": "string",
+            "sourceColumn": "IsWorkingDay_Eng"
+          },
+          {
+            "name": "IsWorkingDay_NI",
+            "dataType": "string",
+            "sourceColumn": "IsWorkingDay_NI"
+          },
+          {
+            "name": "IsWorkingDay_CI",
+            "dataType": "string",
+            "sourceColumn": "IsWorkingDay_CI"
+          },
+          {
+            "name": "IsADP_WorkingDay_Eng",
+            "dataType": "string",
+            "sourceColumn": "IsADP_WorkingDay_Eng"
+          },
+          {
+            "name": "IsADP_WorkingDay_NI",
+            "dataType": "string",
+            "sourceColumn": "IsADP_WorkingDay_NI"
+          },
+          {
+            "name": "IsADP_WorkingDay_CI",
+            "dataType": "string",
+            "sourceColumn": "IsADP_WorkingDay_CI"
+          },
+          {
+            "name": "WorkingDayNumYr_Eng",
+            "dataType": "int64",
+            "sourceColumn": "WorkingDayNumYr_Eng"
+          },
+          {
+            "name": "WorkingDayNumBi_Eng",
+            "dataType": "int64",
+            "sourceColumn": "WorkingDayNumBi_Eng"
+          },
+          {
+            "name": "WorkingDayNumQtr_Eng",
+            "dataType": "int64",
+            "sourceColumn": "WorkingDayNumQtr_Eng"
+          },
+          {
+            "name": "WorkingDayNumMon_Eng",
+            "dataType": "int64",
+            "sourceColumn": "WorkingDayNumMon_Eng"
+          },
+          {
+            "name": "WorkingDayNumYr_NI",
+            "dataType": "int64",
+            "sourceColumn": "WorkingDayNumYr_NI"
+          },
+          {
+            "name": "WorkingDayNumBi_NI",
+            "dataType": "int64",
+            "sourceColumn": "WorkingDayNumBi_NI"
+          },
+          {
+            "name": "WorkingDayNumQtr_NI",
+            "dataType": "int64",
+            "sourceColumn": "WorkingDayNumQtr_NI"
+          },
+          {
+            "name": "WorkingDayNumMon_NI",
+            "dataType": "int64",
+            "sourceColumn": "WorkingDayNumMon_NI"
+          },
+          {
+            "name": "WorkingDayNumYr_CI",
+            "dataType": "int64",
+            "sourceColumn": "WorkingDayNumYr_CI"
+          },
+          {
+            "name": "WorkingDayNumBi_CI",
+            "dataType": "int64",
+            "sourceColumn": "WorkingDayNumBi_CI"
+          },
+          {
+            "name": "WorkingDayNumQtr_CI",
+            "dataType": "int64",
+            "sourceColumn": "WorkingDayNumQtr_CI"
+          },
+          {
+            "name": "WorkingDayNumMon_CI",
+            "dataType": "int64",
+            "sourceColumn": "WorkingDayNumMon_CI"
+          },
+          {
+            "name": "ShortDayName",
+            "dataType": "string",
+            "sourceColumn": "ShortDayName"
+          },
+          {
+            "name": "LongDayName",
+            "dataType": "string",
+            "sourceColumn": "LongDayName"
+          },
+          {
+            "name": "ShortMonName",
+            "dataType": "string",
+            "sourceColumn": "ShortMonName"
+          },
+          {
+            "name": "LongMonName",
+            "dataType": "string",
+            "sourceColumn": "LongMonName"
+          },
+          {
+            "name": "ShortYr",
+            "dataType": "string",
+            "sourceColumn": "ShortYr"
+          },
+          {
+            "name": "LongYr",
+            "dataType": "string",
+            "sourceColumn": "LongYr"
+          },
+          {
+            "name": "YYYY_MM_DD_dashSep",
+            "dataType": "dateTime",
+            "sourceColumn": "YYYY_MM_DD_dashSep"
+          },
+          {
+            "name": "YYYY_MM_DD_slashSep",
+            "dataType": "dateTime",
+            "sourceColumn": "YYYY_MM_DD_slashSep"
+          },
+          {
+            "name": "DD_MM_YY_dashSep",
+            "dataType": "dateTime",
+            "sourceColumn": "DD_MM_YY_dashSep"
+          },
+          {
+            "name": "DD_MM_YY_slashSep",
+            "dataType": "dateTime",
+            "sourceColumn": "DD_MM_YY_slashSep"
+          },
+          {
+            "name": "DD_MM_YYYY_dashSep",
+            "dataType": "dateTime",
+            "sourceColumn": "DD_MM_YYYY_dashSep"
+          },
+          {
+            "name": "DD_MM_YYYY_slashSep",
+            "dataType": "dateTime",
+            "sourceColumn": "DD_MM_YYYY_slashSep"
+          },
+          {
+            "name": "Comments",
+            "dataType": "string",
+            "sourceColumn": "Comments"
+          },
+          {
+            "name": "RunBy",
+            "dataType": "string",
+            "sourceColumn": "RunBy"
+          },
+          {
+            "name": "Rundate",
+            "dataType": "dateTime",
+            "sourceColumn": "Rundate"
+          },
+          {
+            "type": "calculated",
+            "name": "StartOfWeek",
+            "dataType": "dateTime",
+            "isDataTypeInferred": true,
+            "expression": " CALCULATE(min('VI Dim Date'[DD_MM_YYYY_dashSep]),filter('VI Dim Date','VI Dim Date'[WeekNum]=EARLIER('VI Dim Date'[WeekNum])&&YEAR('VI Dim Date'[DD_MM_YYYY_dashSep])=EARLIER('VI Dim Date'[DateYear])))"
+          },
+          {
+            "type": "calculated",
+            "name": "DateYear",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "expression": " YEAR('VI Dim Date'[DD_MM_YYYY_slashSep])"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = Sql.Databases(\"PPDC1SQL01\\PartsPlus\"),",
+                "    PP_SurchargeMgmt = Source{[Name=\"PP_SurchargeMgmt\"]}[Data],",
+                "    dim_TF_Date = PP_SurchargeMgmt{[Schema=\"dim\",Item=\"TF_Date\"]}[Data],",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(dim_TF_Date,{{\"DD_MM_YY_slashSep\", type date}}),",
+                "    #\"Filtered Rows\" = Table.SelectRows(#\"Changed Type\", each Date.IsInCurrentYear([DD_MM_YY_slashSep]) or Date.IsInPreviousYear([DD_MM_YY_slashSep])),",
+                "    #\"Changed Type1\" = Table.TransformColumnTypes(#\"Filtered Rows\",{{\"DD_MM_YYYY_slashSep\", type date}, {\"DD_MM_YY_dashSep\", type date}, {\"YYYY_MM_DD_dashSep\", type date}, {\"YYYY_MM_DD_slashSep\", type date}, {\"DD_MM_YYYY_dashSep\", type date}})",
+                "in",
+                "    #\"Changed Type1\""
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "FI Dim Date",
+        "columns": [
+          {
+            "name": "TF_Date_ID",
+            "dataType": "int64",
+            "sourceColumn": "TF_Date_ID"
+          },
+          {
+            "name": "DayNum",
+            "dataType": "int64",
+            "sourceColumn": "DayNum"
+          },
+          {
+            "name": "WeekNum",
+            "dataType": "int64",
+            "sourceColumn": "WeekNum"
+          },
+          {
+            "name": "MonthNum",
+            "dataType": "int64",
+            "sourceColumn": "MonthNum"
+          },
+          {
+            "name": "QtrNum",
+            "dataType": "int64",
+            "sourceColumn": "QtrNum"
+          },
+          {
+            "name": "HalfYrNum",
+            "dataType": "int64",
+            "sourceColumn": "HalfYrNum"
+          },
+          {
+            "name": "WeekDayNum",
+            "dataType": "int64",
+            "sourceColumn": "WeekDayNum"
+          },
+          {
+            "name": "MonthDayNum",
+            "dataType": "int64",
+            "sourceColumn": "MonthDayNum"
+          },
+          {
+            "name": "QtrDayNum",
+            "dataType": "int64",
+            "sourceColumn": "QtrDayNum"
+          },
+          {
+            "name": "HalfYrDayNum",
+            "dataType": "int64",
+            "sourceColumn": "HalfYrDayNum"
+          },
+          {
+            "name": "IsWorkingDay_Eng",
+            "dataType": "string",
+            "sourceColumn": "IsWorkingDay_Eng"
+          },
+          {
+            "name": "IsWorkingDay_NI",
+            "dataType": "string",
+            "sourceColumn": "IsWorkingDay_NI"
+          },
+          {
+            "name": "IsWorkingDay_CI",
+            "dataType": "string",
+            "sourceColumn": "IsWorkingDay_CI"
+          },
+          {
+            "name": "IsADP_WorkingDay_Eng",
+            "dataType": "string",
+            "sourceColumn": "IsADP_WorkingDay_Eng"
+          },
+          {
+            "name": "IsADP_WorkingDay_NI",
+            "dataType": "string",
+            "sourceColumn": "IsADP_WorkingDay_NI"
+          },
+          {
+            "name": "IsADP_WorkingDay_CI",
+            "dataType": "string",
+            "sourceColumn": "IsADP_WorkingDay_CI"
+          },
+          {
+            "name": "WorkingDayNumYr_Eng",
+            "dataType": "int64",
+            "sourceColumn": "WorkingDayNumYr_Eng"
+          },
+          {
+            "name": "WorkingDayNumBi_Eng",
+            "dataType": "int64",
+            "sourceColumn": "WorkingDayNumBi_Eng"
+          },
+          {
+            "name": "WorkingDayNumQtr_Eng",
+            "dataType": "int64",
+            "sourceColumn": "WorkingDayNumQtr_Eng"
+          },
+          {
+            "name": "WorkingDayNumMon_Eng",
+            "dataType": "int64",
+            "sourceColumn": "WorkingDayNumMon_Eng"
+          },
+          {
+            "name": "WorkingDayNumYr_NI",
+            "dataType": "int64",
+            "sourceColumn": "WorkingDayNumYr_NI"
+          },
+          {
+            "name": "WorkingDayNumBi_NI",
+            "dataType": "int64",
+            "sourceColumn": "WorkingDayNumBi_NI"
+          },
+          {
+            "name": "WorkingDayNumQtr_NI",
+            "dataType": "int64",
+            "sourceColumn": "WorkingDayNumQtr_NI"
+          },
+          {
+            "name": "WorkingDayNumMon_NI",
+            "dataType": "int64",
+            "sourceColumn": "WorkingDayNumMon_NI"
+          },
+          {
+            "name": "WorkingDayNumYr_CI",
+            "dataType": "int64",
+            "sourceColumn": "WorkingDayNumYr_CI"
+          },
+          {
+            "name": "WorkingDayNumBi_CI",
+            "dataType": "int64",
+            "sourceColumn": "WorkingDayNumBi_CI"
+          },
+          {
+            "name": "WorkingDayNumQtr_CI",
+            "dataType": "int64",
+            "sourceColumn": "WorkingDayNumQtr_CI"
+          },
+          {
+            "name": "WorkingDayNumMon_CI",
+            "dataType": "int64",
+            "sourceColumn": "WorkingDayNumMon_CI"
+          },
+          {
+            "name": "ShortDayName",
+            "dataType": "string",
+            "sourceColumn": "ShortDayName"
+          },
+          {
+            "name": "LongDayName",
+            "dataType": "string",
+            "sourceColumn": "LongDayName"
+          },
+          {
+            "name": "ShortMonName",
+            "dataType": "string",
+            "sourceColumn": "ShortMonName"
+          },
+          {
+            "name": "LongMonName",
+            "dataType": "string",
+            "sourceColumn": "LongMonName"
+          },
+          {
+            "name": "ShortYr",
+            "dataType": "string",
+            "sourceColumn": "ShortYr"
+          },
+          {
+            "name": "LongYr",
+            "dataType": "string",
+            "sourceColumn": "LongYr"
+          },
+          {
+            "name": "YYYY_MM_DD_dashSep",
+            "dataType": "dateTime",
+            "sourceColumn": "YYYY_MM_DD_dashSep"
+          },
+          {
+            "name": "YYYY_MM_DD_slashSep",
+            "dataType": "dateTime",
+            "sourceColumn": "YYYY_MM_DD_slashSep"
+          },
+          {
+            "name": "DD_MM_YY_dashSep",
+            "dataType": "dateTime",
+            "sourceColumn": "DD_MM_YY_dashSep"
+          },
+          {
+            "name": "DD_MM_YY_slashSep",
+            "dataType": "dateTime",
+            "sourceColumn": "DD_MM_YY_slashSep"
+          },
+          {
+            "name": "DD_MM_YYYY_dashSep",
+            "dataType": "dateTime",
+            "sourceColumn": "DD_MM_YYYY_dashSep"
+          },
+          {
+            "name": "DD_MM_YYYY_slashSep",
+            "dataType": "dateTime",
+            "sourceColumn": "DD_MM_YYYY_slashSep"
+          },
+          {
+            "name": "Comments",
+            "dataType": "string",
+            "sourceColumn": "Comments"
+          },
+          {
+            "name": "RunBy",
+            "dataType": "string",
+            "sourceColumn": "RunBy"
+          },
+          {
+            "name": "Rundate",
+            "dataType": "dateTime",
+            "sourceColumn": "Rundate"
+          },
+          {
+            "type": "calculated",
+            "name": "StartOfWeek",
+            "dataType": "dateTime",
+            "isDataTypeInferred": true,
+            "expression": " CALCULATE(min('FI Dim Date'[DD_MM_YYYY_dashSep]),filter('FI Dim Date','FI Dim Date'[WeekNum]=EARLIER('FI Dim Date'[WeekNum])&&YEAR('FI Dim Date'[DD_MM_YYYY_dashSep])=EARLIER('FI Dim Date'[DateYear])))"
+          },
+          {
+            "type": "calculated",
+            "name": "DateYear",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "expression": " YEAR('FI Dim Date'[DD_MM_YYYY_slashSep])"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = Sql.Databases(\"PPDC1SQL01\\PartsPlus\"),",
+                "    PP_SurchargeMgmt = Source{[Name=\"PP_SurchargeMgmt\"]}[Data],",
+                "    dim_TF_Date = PP_SurchargeMgmt{[Schema=\"dim\",Item=\"TF_Date\"]}[Data],",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(dim_TF_Date,{{\"DD_MM_YY_slashSep\", type date}}),",
+                "    #\"Filtered Rows\" = Table.SelectRows(#\"Changed Type\", each Date.IsInCurrentYear([DD_MM_YY_slashSep]) or Date.IsInPreviousYear([DD_MM_YY_slashSep])),",
+                "    #\"Changed Type1\" = Table.TransformColumnTypes(#\"Filtered Rows\",{{\"DD_MM_YYYY_slashSep\", type date}, {\"DD_MM_YY_dashSep\", type date}, {\"YYYY_MM_DD_dashSep\", type date}, {\"YYYY_MM_DD_slashSep\", type date}, {\"DD_MM_YYYY_dashSep\", type date}})",
+                "in",
+                "    #\"Changed Type1\""
               ]
             }
           }
