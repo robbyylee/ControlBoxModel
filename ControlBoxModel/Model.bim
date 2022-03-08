@@ -212,6 +212,118 @@
             "formatString": "0.00%;-0.00%;0.00%"
           }
         ]
+      },
+      {
+        "name": "ForkliftStats",
+        "columns": [
+          {
+            "name": "site",
+            "dataType": "string",
+            "sourceColumn": "site"
+          },
+          {
+            "name": "ForkliftID",
+            "dataType": "int64",
+            "sourceColumn": "ForkliftID"
+          },
+          {
+            "name": "VOR",
+            "dataType": "int64",
+            "sourceColumn": "VOR"
+          },
+          {
+            "name": "VORStart",
+            "dataType": "dateTime",
+            "sourceColumn": "VORStart"
+          },
+          {
+            "name": "VORReason",
+            "dataType": "string",
+            "sourceColumn": "VORReason"
+          },
+          {
+            "name": "TodayChecks",
+            "dataType": "int64",
+            "sourceColumn": "TodayChecks"
+          },
+          {
+            "name": "WeekChecks",
+            "dataType": "int64",
+            "sourceColumn": "WeekChecks"
+          },
+          {
+            "name": "MonthChecks",
+            "dataType": "int64",
+            "sourceColumn": "MonthChecks"
+          },
+          {
+            "name": "YearChecks",
+            "dataType": "int64",
+            "sourceColumn": "YearChecks"
+          },
+          {
+            "name": "Defect",
+            "dataType": "int64",
+            "sourceColumn": "Defect"
+          },
+          {
+            "name": "DefectReason",
+            "dataType": "string",
+            "sourceColumn": "DefectReason"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = Sql.Database(\"PPDC1SQL01\\PartsPlus\", \"TF_WebApp_PartsControlBox\", [Query=\"Select FC.site,",
+                "FC.ForkliftID,",
+                "Case When VF.tForkliftID is not null Then '1' Else 0 End as VOR,",
+                "Case When VF.tForkliftID is not null and VF.VOREndDate is null Then VF.VORStartDate Else null End as VORStart,",
+                "Case When VF.tForkliftID is not null and VF.VOREndDate is null Then VF.StartComment Else '' End as VORReason,",
+                "Case When FI.Added = getdate() Then 1 Else 0 End as TodayChecks,",
+                "Case When FI.Added between dateadd(wk,datediff(wk,0,getdate()),0) and getdate() Then 1 Else 0 End as WeekChecks,",
+                "Case When FI.Added between dateadd(mm,datediff(mm,0,getdate()),0) and getdate() Then 1 Else 0 End as MonthChecks,",
+                "Case When FI.Added between dateadd(yy,datediff(yy,0,getdate()),0) and getdate() Then 1 Else 0 End as YearChecks,",
+                "Case When DL.identifier is not null and DL.ActionedDate is null Then 1 Else 0 End as Defect,",
+                "Case When DL.identifier is not null and DL.ActionedDate is null Then DL.Defect Else '' End as DefectReason",
+                "from TF_WebApp_PartsControlBox.dbo.tForkliftConfig FC",
+                "Left Join TF_WebApp_PartsControlBox.dbo.tVOR_Forklift VF On FC.ForkliftID = VF.tForkliftID",
+                "Left Join TF_WebApp_PartsControlBox.dbo.tForkliftInspectionLog FI On FC.ForkliftID = FI.ForkLiftID",
+                "Left Join TF_WebApp_PartsControlBox.dbo.tDefectLog DL On FC.ForkliftID = DL.ForkliftID",
+                "",
+                "\"])",
+                "in",
+                "    Source"
+              ]
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "TotalForklifts",
+            "expression": " if(DISTINCTCOUNT(ForkliftStats[ForkliftID])=0,0,DISTINCTCOUNT(ForkliftStats[ForkliftID]))"
+          },
+          {
+            "name": "FLTodayChecks%",
+            "expression": " if(divide(SUM(ForkliftStats[TodayChecks]),COUNTROWS(ForkliftStats))=0,0,divide(SUM(ForkliftStats[TodayChecks]),COUNTROWS(ForkliftStats)))",
+            "formatString": "0.00%;-0.00%;0.00%"
+          },
+          {
+            "name": "FLWeekChecks%",
+            "expression": " if(divide(sum(ForkliftStats[WeekChecks]),COUNTROWS(ForkliftStats))=0,0,divide(sum(ForkliftStats[WeekChecks]),COUNTROWS(ForkliftStats)))+0",
+            "formatString": "0.00%;-0.00%;0.00%"
+          },
+          {
+            "name": "FLMonthChecks%",
+            "expression": " if(divide(sum(ForkliftStats[MonthChecks]),COUNTROWS(ForkliftStats))=0,0,divide(sum(ForkliftStats[MonthChecks]),COUNTROWS(ForkliftStats)))+0",
+            "formatString": "0.00%;-0.00%;0.00%"
+          }
+        ]
       }
     ],
     "annotations": [
