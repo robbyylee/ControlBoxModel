@@ -1,0 +1,115 @@
+{
+  "name": "SemanticModel",
+  "compatibilityLevel": 1500,
+  "model": {
+    "culture": "en-GB",
+    "dataSources": [
+      {
+        "type": "structured",
+        "name": "SQL/PPDC1SQL01\\PartsPlus;TF_WebApp_PartsControlBox",
+        "connectionDetails": {
+          "protocol": "tds",
+          "address": {
+            "server": "PPDC1SQL01\\PartsPlus",
+            "database": "TF_WebApp_PartsControlBox"
+          },
+          "authentication": null,
+          "query": null
+        },
+        "options": {},
+        "credential": {
+          "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "ppdc1sql01\\partsplus;TF_WebApp_PartsControlBox",
+          "Username": "partsplusuk\\robby.lee",
+          "EncryptConnection": false
+        }
+      }
+    ],
+    "tables": [
+      {
+        "name": "DriverStats",
+        "columns": [
+          {
+            "name": "Site",
+            "dataType": "string",
+            "sourceColumn": "Site"
+          },
+          {
+            "name": "DriverName",
+            "dataType": "string",
+            "sourceColumn": "DriverName"
+          },
+          {
+            "name": "UserType",
+            "dataType": "string",
+            "sourceColumn": "UserType"
+          },
+          {
+            "name": "Available",
+            "dataType": "string",
+            "sourceColumn": "Available"
+          },
+          {
+            "name": "Vehicle",
+            "dataType": "string",
+            "sourceColumn": "Vehicle"
+          },
+          {
+            "name": "Forklift",
+            "dataType": "string",
+            "sourceColumn": "Forklift"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = Sql.Database(\"PPDC1SQL01\\PartsPlus\", \"TF_WebApp_PartsControlBox\", [Query=\"Select DC.Site,#(lf)DC.DriverName,#(lf)UC.UserType,#(lf)DC.Available,#(lf)DC.Vehicle,#(lf)DC.Forklift#(lf)from TF_WebApp_PartsControlBox.dbo.tDriverConfig DC#(lf)Left Join TF_WebApp_PartsControlBox.dbo.tUserConfig UC On DC.DriverUsername = UC.Username\"])",
+                "in",
+                "    Source"
+              ]
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "TotalDrivers",
+            "expression": " if(isblank(count('DriverStats'[DriverName])),0,COUNT(('DriverStats'[DriverName])))"
+          },
+          {
+            "name": "ForkliftAccess",
+            "expression": " if(isblank(countrows(filter(DriverStats,DriverStats[Forklift] = \"1\"))),0,countrows(filter(DriverStats,DriverStats[Forklift]=\"1\")))"
+          },
+          {
+            "name": "ForkliftOff",
+            "expression": " if(isblank(CALCULATE(COUNTROWS(DriverStats),FILTER(DriverStats,DriverStats[Available]=\"0\" && DriverStats[Forklift]=\"1\"))),0,CALCULATE(COUNTROWS(DriverStats),FILTER(DriverStats,DriverStats[Available]=\"0\" && DriverStats[Forklift]=\"1\")))"
+          },
+          {
+            "name": "Temps",
+            "expression": " if(isblank(COUNTROWS(FILTER(DriverStats,DriverStats[UserType]=\"Temp\"))),0,COUNTROWS(FILTER(DriverStats,DriverStats[UserType]=\"Temp\")))"
+          },
+          {
+            "name": "VanAccess",
+            "expression": " if(isblank(COUNTROWS(filter(DriverStats,DriverStats[Vehicle] = \"1\"))),0,countrows(filter(DriverStats,DriverStats[Vehicle] = \"1\")))"
+          },
+          {
+            "name": "VanOff",
+            "expression": " if(isblank(CALCULATE(COUNTROWS(DriverStats),filter(DriverStats,DriverStats[Available]=\"0\" && DriverStats[Vehicle]=\"1\"))),0,CALCULATE(COUNTROWS(DriverStats),filter(DriverStats,DriverStats[Available]=\"0\" && DriverStats[Vehicle]=\"1\")))"
+          }
+        ]
+      }
+    ],
+    "annotations": [
+      {
+        "name": "ClientCompatibilityLevel",
+        "value": "600"
+      }
+    ]
+  },
+  "id": "SemanticModel"
+}
