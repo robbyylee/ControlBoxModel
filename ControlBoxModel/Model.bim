@@ -663,6 +663,48 @@
             "name": "VRM",
             "dataType": "int64",
             "sourceColumn": "VRM"
+          },
+          {
+            "type": "calculated",
+            "name": "Inspect",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "expression": "IF(CALCULATE(MAX(tForkliftInspectionLog[ForkLiftID]),FILTER(tForkliftInspectionLog,tForkliftInspectionLog[ForkLiftID]=vForkliftEachDayOfYear[VRM] &&DATE(YEAR( tForkliftInspectionLog[Added]),MONTH( tForkliftInspectionLog[Added]),DAY( tForkliftInspectionLog[Added]))=vForkliftEachDayOfYear[Date]))<>BLANK(),1,0)"
+          },
+          {
+            "type": "calculated",
+            "name": "Site",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": " LOOKUPVALUE(ForkliftStats[Site],ForkliftStats[ForkliftID],vForkliftEachDayOfYear[VRM])"
+          },
+          {
+            "type": "calculated",
+            "name": "VOR",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "expression": " IF(CALCULATE(MAX(tVOR_Forklift[tForkliftID]),FILTER(tVOR_Forklift,tVOR_Forklift[tForkliftID]=vForkliftEachDayOfYear[VRM] && tVOR_Forklift[VORStartDate] <= vForkliftEachDayOfYear[Date] && tVOR_Forklift[VOREndDate]>=vForkliftEachDayOfYear[Date]))<>BLANK(),1,0)"
+          },
+          {
+            "type": "calculated",
+            "name": "WeekDay",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": " FORMAT(vForkliftEachDayOfYear[Date],\"dddd\")"
+          },
+          {
+            "type": "calculated",
+            "name": "WeekDayNum",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "expression": " WEEKDAY(vForkliftEachDayOfYear[Date],2)"
+          },
+          {
+            "type": "calculated",
+            "name": "Status",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": " IF(vForkliftEachDayOfYear[Date]>TODAY(),\"https://bit.ly/3r1Re8l\",IF(vForkliftEachDayOfYear[VOR]=1,\"https://bit.ly/3g0lQks\",IF(vForkliftEachDayOfYear[Inspect]=1,\"https://bit.ly/3tXuVmh\",\"https://bit.ly/34c36eX\")))"
           }
         ],
         "partitions": [
@@ -1149,6 +1191,259 @@
                 "    TF_WebApp_PartsControlBox = Source{[Name=\"TF_WebApp_PartsControlBox\"]}[Data],",
                 "    dbo_tVehicleInspectionLog = TF_WebApp_PartsControlBox{[Schema=\"dbo\",Item=\"tVehicleInspectionLog\"]}[Data],",
                 "    #\"Changed Type\" = Table.TransformColumnTypes(dbo_tVehicleInspectionLog,{{\"Added\", type date}})",
+                "in",
+                "    #\"Changed Type\""
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "tForkliftInspectionLog",
+        "columns": [
+          {
+            "name": "ForkLiftInspectionID",
+            "dataType": "int64",
+            "sourceColumn": "ForkLiftInspectionID"
+          },
+          {
+            "name": "ForkLiftID",
+            "dataType": "int64",
+            "sourceColumn": "ForkLiftID"
+          },
+          {
+            "name": "FleetNumber",
+            "dataType": "string",
+            "sourceColumn": "FleetNumber"
+          },
+          {
+            "name": "Forks",
+            "dataType": "boolean",
+            "sourceColumn": "Forks"
+          },
+          {
+            "name": "ForksComment",
+            "dataType": "string",
+            "sourceColumn": "ForksComment"
+          },
+          {
+            "name": "Carriage",
+            "dataType": "boolean",
+            "sourceColumn": "Carriage"
+          },
+          {
+            "name": "CarriageComment",
+            "dataType": "string",
+            "sourceColumn": "CarriageComment"
+          },
+          {
+            "name": "Mast",
+            "dataType": "boolean",
+            "sourceColumn": "Mast"
+          },
+          {
+            "name": "MastComment",
+            "dataType": "string",
+            "sourceColumn": "MastComment"
+          },
+          {
+            "name": "Chains",
+            "dataType": "boolean",
+            "sourceColumn": "Chains"
+          },
+          {
+            "name": "ChainsComment",
+            "dataType": "string",
+            "sourceColumn": "ChainsComment"
+          },
+          {
+            "name": "Wheels",
+            "dataType": "boolean",
+            "sourceColumn": "Wheels"
+          },
+          {
+            "name": "WheelsComment",
+            "dataType": "string",
+            "sourceColumn": "WheelsComment"
+          },
+          {
+            "name": "Batteries",
+            "dataType": "boolean",
+            "sourceColumn": "Batteries"
+          },
+          {
+            "name": "BatteriesComment",
+            "dataType": "string",
+            "sourceColumn": "BatteriesComment"
+          },
+          {
+            "name": "Guards",
+            "dataType": "boolean",
+            "sourceColumn": "Guards"
+          },
+          {
+            "name": "GuardsComment",
+            "dataType": "string",
+            "sourceColumn": "GuardsComment"
+          },
+          {
+            "name": "EngineOil",
+            "dataType": "boolean",
+            "sourceColumn": "EngineOil"
+          },
+          {
+            "name": "EngineOilComment",
+            "dataType": "string",
+            "sourceColumn": "EngineOilComment"
+          },
+          {
+            "name": "Coolant",
+            "dataType": "boolean",
+            "sourceColumn": "Coolant"
+          },
+          {
+            "name": "CoolantComment",
+            "dataType": "string",
+            "sourceColumn": "CoolantComment"
+          },
+          {
+            "name": "Fuel",
+            "dataType": "boolean",
+            "sourceColumn": "Fuel"
+          },
+          {
+            "name": "FuelComment",
+            "dataType": "string",
+            "sourceColumn": "FuelComment"
+          },
+          {
+            "name": "HydraulicOil",
+            "dataType": "boolean",
+            "sourceColumn": "HydraulicOil"
+          },
+          {
+            "name": "HydraulicOilComment",
+            "dataType": "string",
+            "sourceColumn": "HydraulicOilComment"
+          },
+          {
+            "name": "HydraulicRams",
+            "dataType": "boolean",
+            "sourceColumn": "HydraulicRams"
+          },
+          {
+            "name": "HydraulicRamsComment",
+            "dataType": "string",
+            "sourceColumn": "HydraulicRamsComment"
+          },
+          {
+            "name": "Controls",
+            "dataType": "boolean",
+            "sourceColumn": "Controls"
+          },
+          {
+            "name": "ControlsComment",
+            "dataType": "string",
+            "sourceColumn": "ControlsComment"
+          },
+          {
+            "name": "Brakes",
+            "dataType": "boolean",
+            "sourceColumn": "Brakes"
+          },
+          {
+            "name": "BrakesComment",
+            "dataType": "string",
+            "sourceColumn": "BrakesComment"
+          },
+          {
+            "name": "Steering",
+            "dataType": "boolean",
+            "sourceColumn": "Steering"
+          },
+          {
+            "name": "SteeringComment",
+            "dataType": "string",
+            "sourceColumn": "SteeringComment"
+          },
+          {
+            "name": "Instruments",
+            "dataType": "boolean",
+            "sourceColumn": "Instruments"
+          },
+          {
+            "name": "InstrumentsComment",
+            "dataType": "string",
+            "sourceColumn": "InstrumentsComment"
+          },
+          {
+            "name": "Horn",
+            "dataType": "boolean",
+            "sourceColumn": "Horn"
+          },
+          {
+            "name": "HornComments",
+            "dataType": "string",
+            "sourceColumn": "HornComments"
+          },
+          {
+            "name": "Attachments",
+            "dataType": "boolean",
+            "sourceColumn": "Attachments"
+          },
+          {
+            "name": "AttachmentsComments",
+            "dataType": "string",
+            "sourceColumn": "AttachmentsComments"
+          },
+          {
+            "name": "Hours",
+            "dataType": "int64",
+            "sourceColumn": "Hours"
+          },
+          {
+            "name": "AddedBy",
+            "dataType": "string",
+            "sourceColumn": "AddedBy"
+          },
+          {
+            "name": "Added",
+            "dataType": "dateTime",
+            "sourceColumn": "Added"
+          },
+          {
+            "name": "Site",
+            "dataType": "string",
+            "sourceColumn": "Site"
+          },
+          {
+            "name": "CMA",
+            "dataType": "string",
+            "sourceColumn": "CMA"
+          },
+          {
+            "name": "AdditionalComment",
+            "dataType": "string",
+            "sourceColumn": "AdditionalComment"
+          },
+          {
+            "name": "image",
+            "dataType": "string",
+            "sourceColumn": "image"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = Sql.Databases(\"ppdc1sql01\\PartsPlus\"),",
+                "    TF_WebApp_PartsControlBox = Source{[Name=\"TF_WebApp_PartsControlBox\"]}[Data],",
+                "    dbo_tForkliftInspectionLog = TF_WebApp_PartsControlBox{[Schema=\"dbo\",Item=\"tForkliftInspectionLog\"]}[Data],",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(dbo_tForkliftInspectionLog,{{\"Added\", type date}})",
                 "in",
                 "    #\"Changed Type\""
               ]
