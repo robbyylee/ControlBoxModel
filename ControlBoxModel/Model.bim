@@ -24,6 +24,27 @@
           "Username": "partsplusuk\\robby.lee",
           "EncryptConnection": false
         }
+      },
+      {
+        "type": "structured",
+        "name": "SQL/PPDC1SQL01\\PartsPlus;PP_BI_Reporting",
+        "connectionDetails": {
+          "protocol": "tds",
+          "address": {
+            "server": "PPDC1SQL01\\PartsPlus",
+            "database": "PP_BI_Reporting"
+          },
+          "authentication": null,
+          "query": null
+        },
+        "options": {},
+        "credential": {
+          "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "ppdc1sql01\\partsplus;PP_BI_Reporting",
+          "Username": "partsplusuk\\robby.lee",
+          "EncryptConnection": false
+        }
       }
     ],
     "tables": [
@@ -539,6 +560,597 @@
                 "    Source = Sql.Database(\"PPDC1SQL01\\PartsPlus\", \"TF_WebApp_PartsControlBox\", [Query=\"Select Site,#(lf)Registration,#(lf)Case When NextMOT > getdate() and NextMOT < getdate()+30 Then 1 Else 0 End as MOTDue,#(lf)Case When NextMOT < getdate() Then 1 Else 0 End MOTMissed,#(lf)Case When NextMOT is null Then 1 Else 0 End MOTNotSet,#(lf)Case When DaysUntilNextService >= 1 Then 1 Else 0 End ServiceDue,#(lf)Case When DaysUntilNextService = 0 Then 1 Else 0 End ServiceMissed,#(lf)Case When DaysUntilNextService is null Then 1 Else 0 End ServiceNotSet#(lf)from TF_WebApp_PartsControlBox.dbo.tVehicleConfig\"])",
                 "in",
                 "    Source"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "tSiteConfig",
+        "columns": [
+          {
+            "name": "SiteID",
+            "dataType": "int64",
+            "sourceColumn": "SiteID"
+          },
+          {
+            "name": "SiteCode",
+            "dataType": "string",
+            "sourceColumn": "SiteCode"
+          },
+          {
+            "name": "Active",
+            "dataType": "string",
+            "sourceColumn": "Active"
+          },
+          {
+            "name": "Added",
+            "dataType": "dateTime",
+            "sourceColumn": "Added"
+          },
+          {
+            "name": "AddedBy",
+            "dataType": "string",
+            "sourceColumn": "AddedBy"
+          },
+          {
+            "name": "Region",
+            "dataType": "string",
+            "sourceColumn": "Region"
+          },
+          {
+            "name": "TF_GM",
+            "dataType": "string",
+            "sourceColumn": "TF_GM"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/PPDC1SQL01\\PartsPlus;TF_WebApp_PartsControlBox\",",
+                "    dbo_tSiteConfig = Source{[Schema=\"dbo\",Item=\"tSiteConfig\"]}[Data]",
+                "in",
+                "    dbo_tSiteConfig"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Regions",
+        "columns": [
+          {
+            "name": "SiteCode",
+            "dataType": "string",
+            "sourceColumn": "SiteCode"
+          },
+          {
+            "name": "SiteRegion",
+            "dataType": "string",
+            "sourceColumn": "SiteRegion"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = Sql.Database(\"PPDC1SQL01\\PartsPlus\", \"TF_WebApp_PartsControlBox\", [Query=\"Select SiteCode,#(lf)Case When Region = 'TrustFord' Then TF_GM#(lf)Else Region#(lf)End SiteRegion#(lf)from TF_WebApp_PartsControlBox.dbo.tSiteConfig#(lf)\"])",
+                "in",
+                "    Source"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "vForkliftEachDayOfYear",
+        "columns": [
+          {
+            "name": "Date",
+            "dataType": "dateTime",
+            "sourceColumn": "Date"
+          },
+          {
+            "name": "VRM",
+            "dataType": "int64",
+            "sourceColumn": "VRM"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/PPDC1SQL01\\PartsPlus;PP_BI_Reporting\",",
+                "    dbo_vForkliftEachDayOfYear = Source{[Schema=\"dbo\",Item=\"vForkliftEachDayOfYear\"]}[Data],",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(dbo_vForkliftEachDayOfYear,{{\"Date\", type date}})",
+                "in",
+                "    #\"Changed Type\""
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "vVehicleEachDayOfYear",
+        "columns": [
+          {
+            "name": "Date",
+            "dataType": "dateTime",
+            "sourceColumn": "Date"
+          },
+          {
+            "name": "VRM",
+            "dataType": "string",
+            "sourceColumn": "VRM"
+          },
+          {
+            "type": "calculated",
+            "name": "AssDrive",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": " CALCULATE(MAX(tDriverAssignment[NewDriverUsername]),FILTER(tDriverAssignment,tDriverAssignment[Registration]=vVehicleEachDayOfYear[VRM] && DATE(YEAR(tDriverAssignment[DateChanged]),MONTH(tDriverAssignment[DateChanged]),DAY(tDriverAssignment[DateChanged])) <= vVehicleEachDayOfYear[Date] && if(tDriverAssignment[ActualEndDate]=BLANK(),vVehicleEachDayOfYear[Date]+1,tDriverAssignment[ActualEndDate])-1 >= vVehicleEachDayOfYear[Date]))"
+          },
+          {
+            "type": "calculated",
+            "name": "DriAv",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "expression": " IF(vVehicleEachDayOfYear[Inspect]=1,0,IF(CALCULATE(MAX('Driver Unavailable'[DriverUsername]),FILTER('Driver Unavailable','Driver Unavailable'[DriverUsername] = vVehicleEachDayOfYear[AssDrive] && DATE(YEAR('Driver Unavailable'[StartDate]),MONTH('Driver Unavailable'[StartDate]),DAY('Driver Unavailable'[StartDate]))<=vVehicleEachDayOfYear[Date] && IF('Driver Unavailable'[EndDate] =BLANK(),vVehicleEachDayOfYear[Date]+1,'Driver Unavailable'[EndDate]-1)>=vVehicleEachDayOfYear[Date]))<>BLANK(),1,0))"
+          },
+          {
+            "type": "calculated",
+            "name": "Inspect",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "expression": " IF(LOOKUPVALUE(tVehicleInspectionLog[Registration],tVehicleInspectionLog[Registration],vVehicleEachDayOfYear[VRM],tVehicleInspectionLog[Added],vVehicleEachDayOfYear[Date])<>BLANK(),1,0)"
+          },
+          {
+            "type": "calculated",
+            "name": "Site",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": " LOOKUPVALUE(VehicleStats[Site],VehicleStats[Registration],vVehicleEachDayOfYear[VRM])"
+          },
+          {
+            "type": "calculated",
+            "name": "Status",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": "  IF(vVehicleEachDayOfYear[Date]>TODAY(),\"https://bit.ly/3r1Re8l\",IF(vVehicleEachDayOfYear[VOR]=1,\"https://bit.ly/3g0lQks\",IF(vVehicleEachDayOfYear[DriAv]=1,\"https://bit.ly/3G4tsNc\",IF(vVehicleEachDayOfYear[Inspect]=1,\"https://bit.ly/3tXuVmh\",\"https://bit.ly/34c36eX\"))))",
+            "dataCategory": "ImageUrl"
+          },
+          {
+            "type": "calculated",
+            "name": "StatusIcon",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": " IF(vVehicleEachDayOfYear[Date]>TODAY(),\"FUTURE\",IF(vVehicleEachDayOfYear[VOR]=1,\"VOR\",IF(vVehicleEachDayOfYear[DriAv]=1,\"DriAv\",IF(vVehicleEachDayOfYear[Inspect]=1,\"INS\",\"NONE\"))))"
+          },
+          {
+            "type": "calculated",
+            "name": "VOR",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "expression": " IF(vVehicleEachDayOfYear[Inspect]=1,0,IF(CALCULATE(MAX(tVOR_Vehicle[Registration]),FILTER(tVOR_Vehicle,tVOR_Vehicle[Registration]=vVehicleEachDayOfYear[VRM] && DATE(YEAR(tVOR_Vehicle[VORStartDate]),MONTH(tVOR_Vehicle[VORStartDate]),DAY(tVOR_Vehicle[VORStartDate])) <= vVehicleEachDayOfYear[Date] && IF(tVOR_Vehicle[VOREndDate]=BLANK(),vVehicleEachDayOfYear[Date]+1,IF(DATE(YEAR(tVOR_Vehicle[VOREndDate]),MONTH(tVOR_Vehicle[VOREndDate]),DAY(tVOR_Vehicle[VOREndDate]))=vVehicleEachDayOfYear[Date],vVehicleEachDayOfYear[Date]-1,tVOR_Vehicle[VOREndDate]))>vVehicleEachDayOfYear[Date]))<>BLANK(),1,0))"
+          },
+          {
+            "type": "calculated",
+            "name": "WeekDay",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": " FORMAT(vVehicleEachDayOfYear[Date],\"dddd\")"
+          },
+          {
+            "type": "calculated",
+            "name": "WeekDayNum",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "expression": " WEEKDAY(vVehicleEachDayOfYear[Date],2)"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/PPDC1SQL01\\PartsPlus;PP_BI_Reporting\",",
+                "    dbo_vVehicleEachDayOfYear = Source{[Schema=\"dbo\",Item=\"vVehicleEachDayOfYear\"]}[Data],",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(dbo_vVehicleEachDayOfYear,{{\"Date\", type date}})",
+                "in",
+                "    #\"Changed Type\""
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "tDriverAssignment",
+        "columns": [
+          {
+            "name": "ID",
+            "dataType": "int64",
+            "sourceColumn": "ID"
+          },
+          {
+            "name": "VehicleID",
+            "dataType": "int64",
+            "sourceColumn": "VehicleID"
+          },
+          {
+            "name": "Registration",
+            "dataType": "string",
+            "sourceColumn": "Registration"
+          },
+          {
+            "name": "Site",
+            "dataType": "string",
+            "sourceColumn": "Site"
+          },
+          {
+            "name": "OldDriverUsername",
+            "dataType": "string",
+            "sourceColumn": "OldDriverUsername"
+          },
+          {
+            "name": "NewDriverUsername",
+            "dataType": "string",
+            "sourceColumn": "NewDriverUsername"
+          },
+          {
+            "name": "DateChanged",
+            "dataType": "dateTime",
+            "sourceColumn": "DateChanged"
+          },
+          {
+            "name": "EndDate",
+            "dataType": "dateTime",
+            "sourceColumn": "EndDate"
+          },
+          {
+            "type": "calculated",
+            "name": "Count",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "expression": " CALCULATE(COUNTA(tDriverAssignment[Registration])+1,FILTER(tDriverAssignment,tDriverAssignment[Registration]=EARLIER(tDriverAssignment[Registration]) && tDriverAssignment[DateChanged]<EARLIER(tDriverAssignment[DateChanged])))"
+          },
+          {
+            "type": "calculated",
+            "name": "Latest",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "expression": " IF(CALCULATE(COUNTA(tDriverAssignment[Registration]),FILTER(tDriverAssignment,tDriverAssignment[Registration]=EARLIER(tDriverAssignment[Registration])))=tDriverAssignment[Count],1,0)"
+          },
+          {
+            "type": "calculated",
+            "name": "CountDate",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "expression": " IF(tDriverAssignment[EndDate]=BLANK() && tDriverAssignment[Latest] = 0,tDriverAssignment[Count]+1,tDriverAssignment[Count])"
+          },
+          {
+            "type": "calculated",
+            "name": "ActualEndDate",
+            "dataType": "dateTime",
+            "isDataTypeInferred": true,
+            "expression": " IF(tDriverAssignment[EndDate]=BLANK(),IF(tDriverAssignment[Latest]=1,tDriverAssignment[EndDate],CALCULATE(MIN(tDriverAssignment[DateChanged]),FILTER(tDriverAssignment,tDriverAssignment[CountDate]=tDriverAssignment[Count] && EARLIER(tDriverAssignment[Registration])=tDriverAssignment[Registration]))),tDriverAssignment[EndDate])"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/PPDC1SQL01\\PartsPlus;TF_WebApp_PartsControlBox\",",
+                "    dbo_tDriverAssignment = Source{[Schema=\"dbo\",Item=\"tDriverAssignment\"]}[Data]",
+                "in",
+                "    dbo_tDriverAssignment"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Driver Unavailable",
+        "columns": [
+          {
+            "name": "id",
+            "dataType": "int64",
+            "sourceColumn": "id"
+          },
+          {
+            "name": "DriverID",
+            "dataType": "int64",
+            "sourceColumn": "DriverID"
+          },
+          {
+            "name": "DriverUsername",
+            "dataType": "string",
+            "sourceColumn": "DriverUsername"
+          },
+          {
+            "name": "StartDate",
+            "dataType": "dateTime",
+            "sourceColumn": "StartDate"
+          },
+          {
+            "name": "EndDate",
+            "dataType": "dateTime",
+            "sourceColumn": "EndDate"
+          },
+          {
+            "name": "StartedBy",
+            "dataType": "string",
+            "sourceColumn": "StartedBy"
+          },
+          {
+            "name": "EndedBy",
+            "dataType": "string",
+            "sourceColumn": "EndedBy"
+          },
+          {
+            "name": "Site",
+            "dataType": "string",
+            "sourceColumn": "Site"
+          },
+          {
+            "name": "Registration",
+            "dataType": "string",
+            "sourceColumn": "Registration"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/PPDC1SQL01\\PartsPlus;TF_WebApp_PartsControlBox\",",
+                "    dbo_tDriverUnavailable = Source{[Schema=\"dbo\",Item=\"tDriverUnavailable\"]}[Data]",
+                "in",
+                "    dbo_tDriverUnavailable"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "tVehicleInspectionLog",
+        "columns": [
+          {
+            "name": "VehicleInspectionID",
+            "dataType": "int64",
+            "sourceColumn": "VehicleInspectionID"
+          },
+          {
+            "name": "VehicleID",
+            "dataType": "int64",
+            "sourceColumn": "VehicleID"
+          },
+          {
+            "name": "Registration",
+            "dataType": "string",
+            "sourceColumn": "Registration"
+          },
+          {
+            "name": "CurrentMileage",
+            "dataType": "int64",
+            "sourceColumn": "CurrentMileage"
+          },
+          {
+            "name": "Lights",
+            "dataType": "boolean",
+            "sourceColumn": "Lights"
+          },
+          {
+            "name": "LightsComment",
+            "dataType": "string",
+            "sourceColumn": "LightsComment"
+          },
+          {
+            "name": "HornSteering",
+            "dataType": "boolean",
+            "sourceColumn": "HornSteering"
+          },
+          {
+            "name": "HornSteeringComment",
+            "dataType": "string",
+            "sourceColumn": "HornSteeringComment"
+          },
+          {
+            "name": "Brakes",
+            "dataType": "boolean",
+            "sourceColumn": "Brakes"
+          },
+          {
+            "name": "BrakesComment",
+            "dataType": "string",
+            "sourceColumn": "BrakesComment"
+          },
+          {
+            "name": "WasherWipers",
+            "dataType": "boolean",
+            "sourceColumn": "WasherWipers"
+          },
+          {
+            "name": "WasherWipersComment",
+            "dataType": "string",
+            "sourceColumn": "WasherWipersComment"
+          },
+          {
+            "name": "SeatBelts",
+            "dataType": "boolean",
+            "sourceColumn": "SeatBelts"
+          },
+          {
+            "name": "SeatBeltsComment",
+            "dataType": "string",
+            "sourceColumn": "SeatBeltsComment"
+          },
+          {
+            "name": "MirrorsGlass",
+            "dataType": "boolean",
+            "sourceColumn": "MirrorsGlass"
+          },
+          {
+            "name": "MirrorsGlassComment",
+            "dataType": "string",
+            "sourceColumn": "MirrorsGlassComment"
+          },
+          {
+            "name": "BodyworkDoors",
+            "dataType": "boolean",
+            "sourceColumn": "BodyworkDoors"
+          },
+          {
+            "name": "BodyworkDoorsComment",
+            "dataType": "string",
+            "sourceColumn": "BodyworkDoorsComment"
+          },
+          {
+            "name": "Tyres",
+            "dataType": "boolean",
+            "sourceColumn": "Tyres"
+          },
+          {
+            "name": "TyresComment",
+            "dataType": "string",
+            "sourceColumn": "TyresComment"
+          },
+          {
+            "name": "BatteryFluids",
+            "dataType": "boolean",
+            "sourceColumn": "BatteryFluids"
+          },
+          {
+            "name": "BatteryFluidsComment",
+            "dataType": "string",
+            "sourceColumn": "BatteryFluidsComment"
+          },
+          {
+            "name": "Straps",
+            "dataType": "boolean",
+            "sourceColumn": "Straps"
+          },
+          {
+            "name": "StrapsComment",
+            "dataType": "string",
+            "sourceColumn": "StrapsComment"
+          },
+          {
+            "name": "FirstAid",
+            "dataType": "boolean",
+            "sourceColumn": "FirstAid"
+          },
+          {
+            "name": "FirstAidComment",
+            "dataType": "string",
+            "sourceColumn": "FirstAidComment"
+          },
+          {
+            "name": "TailLift",
+            "dataType": "string",
+            "sourceColumn": "TailLift"
+          },
+          {
+            "name": "TailLiftComment",
+            "dataType": "string",
+            "sourceColumn": "TailLiftComment"
+          },
+          {
+            "name": "Exhaust",
+            "dataType": "boolean",
+            "sourceColumn": "Exhaust"
+          },
+          {
+            "name": "ExhaustComment",
+            "dataType": "string",
+            "sourceColumn": "ExhaustComment"
+          },
+          {
+            "name": "Description",
+            "dataType": "string",
+            "sourceColumn": "Description"
+          },
+          {
+            "name": "AdditionalComment",
+            "dataType": "string",
+            "sourceColumn": "AdditionalComment"
+          },
+          {
+            "name": "Added",
+            "dataType": "dateTime",
+            "sourceColumn": "Added"
+          },
+          {
+            "name": "AddedBy",
+            "dataType": "string",
+            "sourceColumn": "AddedBy"
+          },
+          {
+            "name": "Site",
+            "dataType": "string",
+            "sourceColumn": "Site"
+          },
+          {
+            "name": "CMA",
+            "dataType": "string",
+            "sourceColumn": "CMA"
+          },
+          {
+            "name": "image",
+            "dataType": "string",
+            "sourceColumn": "image"
+          },
+          {
+            "type": "calculated",
+            "name": "Ranking",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "expression": " CALCULATE(COUNTA(tVehicleInspectionLog[Registration]),filter(tVehicleInspectionLog,EARLIER(tVehicleInspectionLog[Registration])=tVehicleInspectionLog[Registration]))"
+          },
+          {
+            "type": "calculated",
+            "name": "WkNum",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "expression": " WEEKNUM(tVehicleInspectionLog[Added])"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = Sql.Databases(\"PPDC1SQL01\\PartsPlus\"),",
+                "    TF_WebApp_PartsControlBox = Source{[Name=\"TF_WebApp_PartsControlBox\"]}[Data],",
+                "    dbo_tVehicleInspectionLog = TF_WebApp_PartsControlBox{[Schema=\"dbo\",Item=\"tVehicleInspectionLog\"]}[Data],",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(dbo_tVehicleInspectionLog,{{\"Added\", type date}})",
+                "in",
+                "    #\"Changed Type\""
               ]
             }
           }
