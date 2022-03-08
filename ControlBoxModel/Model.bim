@@ -102,6 +102,116 @@
             "expression": " if(isblank(CALCULATE(COUNTROWS(DriverStats),filter(DriverStats,DriverStats[Available]=\"0\" && DriverStats[Vehicle]=\"1\"))),0,CALCULATE(COUNTROWS(DriverStats),filter(DriverStats,DriverStats[Available]=\"0\" && DriverStats[Vehicle]=\"1\")))"
           }
         ]
+      },
+      {
+        "name": "VehicleStats",
+        "columns": [
+          {
+            "name": "Site",
+            "dataType": "string",
+            "sourceColumn": "Site"
+          },
+          {
+            "name": "VehicleID",
+            "dataType": "int64",
+            "sourceColumn": "VehicleID"
+          },
+          {
+            "name": "Registration",
+            "dataType": "string",
+            "sourceColumn": "Registration"
+          },
+          {
+            "name": "DriverName",
+            "dataType": "string",
+            "sourceColumn": "DriverName"
+          },
+          {
+            "name": "VOR",
+            "dataType": "int64",
+            "sourceColumn": "VOR"
+          },
+          {
+            "name": "VORStart",
+            "dataType": "dateTime",
+            "sourceColumn": "VORStart"
+          },
+          {
+            "name": "VORReason",
+            "dataType": "string",
+            "sourceColumn": "VORReason"
+          },
+          {
+            "name": "TodayChecks",
+            "dataType": "int64",
+            "sourceColumn": "TodayChecks"
+          },
+          {
+            "name": "WeekChecks",
+            "dataType": "int64",
+            "sourceColumn": "WeekChecks"
+          },
+          {
+            "name": "MonthChecks",
+            "dataType": "int64",
+            "sourceColumn": "MonthChecks"
+          },
+          {
+            "name": "YearChecks",
+            "dataType": "int64",
+            "sourceColumn": "YearChecks"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = Sql.Database(\"PPDC1SQL01\\PartsPlus\", \"TF_WebApp_PartsControlBox\", [Query=\"Select VC.Site,",
+                "VC.VehicleID,",
+                "VC.Registration,",
+                "VC.DriverName,",
+                "Case When VV.Registration is not null Then '1' Else 0 End as VOR,",
+                "Case When VV.Registration is not null and VV.VOREndDate is null Then VV.VORStartDate Else null End as VORStart,",
+                "Case When VV.Registration is not null and VV.VOREndDate is null Then VV.StartComment Else '' End as VORReason,",
+                "Case When VI.Added between convert (date,getdate()) and getdate() Then 1 Else 0 End as TodayChecks,",
+                "Case When VI.Added between dateadd(wk,datediff(wk,0,getdate()),0) and getdate() Then 1 Else 0 End as WeekChecks,",
+                "Case When VI.Added between dateadd(mm,datediff(mm,0,getdate()),0) and getdate() Then 1 Else 0 End as MonthChecks,",
+                "Case When VI.Added between dateadd(yy,datediff(yy,0,getdate()),0) and getdate() Then 1 Else 0 End as YearChecks",
+                "from TF_WebApp_PartsControlBox.dbo.tVehicleConfig VC",
+                "Left Join TF_WebApp_PartsControlBox.dbo.tVOR_Vehicle VV On VC.Registration = VV.Registration",
+                "Left Join TF_WebApp_PartsControlBox.dbo.tVehicleInspectionLog VI On VC.Registration = VI.Registration",
+                "\"])",
+                "in",
+                "    Source"
+              ]
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "TotalVehicles",
+            "expression": " if(isblank(DISTINCTCOUNT(VehicleStats[Registration])),0,distinctcount(VehicleStats[Registration]))+0"
+          },
+          {
+            "name": "TodayChecks%",
+            "expression": " IF(DIVIDE(CALCULATE(DISTINCTCOUNT(VehicleStats[Registration]),FILTER(VehicleStats,VehicleStats[TodayChecks]=1)),[TotalVehicles])=0,0,DIVIDE(CALCULATE(DISTINCTCOUNT(VehicleStats[Registration]),FILTER(VehicleStats,VehicleStats[TodayChecks]=1)),[TotalVehicles]))+0",
+            "formatString": "0.00%;-0.00%;0.00%"
+          },
+          {
+            "name": "WeekChecks%",
+            "expression": " IF(DIVIDE(CALCULATE(DISTINCTCOUNT(VehicleStats[Registration]),FILTER(VehicleStats,VehicleStats[WeekChecks]=1)),[TotalVehicles]*WEEKDAY(TODAY(),2))=0,0,DIVIDE(CALCULATE(DISTINCTCOUNT(VehicleStats[Registration]),FILTER(VehicleStats,VehicleStats[WeekChecks]=1)),[TotalVehicles]*WEEKDAY(TODAY(),2)))+0",
+            "formatString": "0.00%;-0.00%;0.00%"
+          },
+          {
+            "name": "MonthChecks%",
+            "expression": " IF(DIVIDE(CALCULATE(DISTINCTCOUNT(VehicleStats[Registration]),FILTER(VehicleStats,VehicleStats[MonthChecks]=1)),[TotalVehicles]*DAY(TODAY()))=0,0,DIVIDE(CALCULATE(DISTINCTCOUNT(VehicleStats[Registration]),FILTER(VehicleStats,VehicleStats[MonthChecks]=1)),[TotalVehicles]*DAY(TODAY())))+0",
+            "formatString": "0.00%;-0.00%;0.00%"
+          }
+        ]
       }
     ],
     "annotations": [
