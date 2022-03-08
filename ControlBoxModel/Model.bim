@@ -483,6 +483,66 @@
             "formatString": "0%;-0%;0%"
           }
         ]
+      },
+      {
+        "name": "MOT & Services",
+        "columns": [
+          {
+            "name": "Site",
+            "dataType": "string",
+            "sourceColumn": "Site"
+          },
+          {
+            "name": "Registration",
+            "dataType": "string",
+            "sourceColumn": "Registration"
+          },
+          {
+            "name": "MOTDue",
+            "dataType": "int64",
+            "sourceColumn": "MOTDue"
+          },
+          {
+            "name": "MOTMissed",
+            "dataType": "int64",
+            "sourceColumn": "MOTMissed"
+          },
+          {
+            "name": "MOTNotSet",
+            "dataType": "int64",
+            "sourceColumn": "MOTNotSet"
+          },
+          {
+            "name": "ServiceDue",
+            "dataType": "int64",
+            "sourceColumn": "ServiceDue"
+          },
+          {
+            "name": "ServiceMissed",
+            "dataType": "int64",
+            "sourceColumn": "ServiceMissed"
+          },
+          {
+            "name": "ServiceNotSet",
+            "dataType": "int64",
+            "sourceColumn": "ServiceNotSet"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = Sql.Database(\"PPDC1SQL01\\PartsPlus\", \"TF_WebApp_PartsControlBox\", [Query=\"Select Site,#(lf)Registration,#(lf)Case When NextMOT > getdate() and NextMOT < getdate()+30 Then 1 Else 0 End as MOTDue,#(lf)Case When NextMOT < getdate() Then 1 Else 0 End MOTMissed,#(lf)Case When NextMOT is null Then 1 Else 0 End MOTNotSet,#(lf)Case When DaysUntilNextService >= 1 Then 1 Else 0 End ServiceDue,#(lf)Case When DaysUntilNextService = 0 Then 1 Else 0 End ServiceMissed,#(lf)Case When DaysUntilNextService is null Then 1 Else 0 End ServiceNotSet#(lf)from TF_WebApp_PartsControlBox.dbo.tVehicleConfig\"])",
+                "in",
+                "    Source"
+              ]
+            }
+          }
+        ]
       }
     ],
     "annotations": [
