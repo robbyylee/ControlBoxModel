@@ -101,6 +101,11 @@
             "name": "Forklift",
             "dataType": "string",
             "sourceColumn": "Forklift"
+          },
+          {
+            "name": "DriverID",
+            "dataType": "int64",
+            "sourceColumn": "DriverID"
           }
         ],
         "partitions": [
@@ -111,7 +116,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = Sql.Database(\"PPDC1SQL01\\PartsPlus\", \"TF_WebApp_PartsControlBox\", [Query=\"Select DC.Site,#(lf)DC.DriverName,#(lf)UC.UserType,#(lf)DC.Available,#(lf)DC.Vehicle,#(lf)DC.Forklift#(lf)from TF_WebApp_PartsControlBox.dbo.tDriverConfig DC#(lf)Left Join TF_WebApp_PartsControlBox.dbo.tUserConfig UC On DC.DriverUsername = UC.Username\"])",
+                "    Source = Sql.Database(\"PPDC1SQL01\\PartsPlus\", \"TF_WebApp_PartsControlBox\", [Query=\"Select DC.DriverID, DC.Site,#(lf)DC.DriverName,#(lf)UC.UserType,#(lf)DC.Available,#(lf)DC.Vehicle,#(lf)DC.Forklift#(lf)from TF_WebApp_PartsControlBox.dbo.tDriverConfig DC#(lf)Left Join TF_WebApp_PartsControlBox.dbo.tUserConfig UC On DC.DriverUsername = UC.Username\"])",
                 "in",
                 "    Source"
               ]
@@ -1977,6 +1982,117 @@
                 "    #\"Changed Type1\""
               ]
             }
+          }
+        ]
+      },
+      {
+        "name": "tDriverSecurityChecks",
+        "columns": [
+          {
+            "name": "SecurityID",
+            "dataType": "int64",
+            "sourceColumn": "SecurityID"
+          },
+          {
+            "name": "Site",
+            "dataType": "string",
+            "sourceColumn": "Site"
+          },
+          {
+            "name": "DriverID",
+            "dataType": "int64",
+            "sourceColumn": "DriverID"
+          },
+          {
+            "name": "DriverUsername",
+            "dataType": "string",
+            "sourceColumn": "DriverUsername"
+          },
+          {
+            "name": "Registration",
+            "dataType": "string",
+            "sourceColumn": "Registration"
+          },
+          {
+            "name": "AuditedBy",
+            "dataType": "string",
+            "sourceColumn": "AuditedBy"
+          },
+          {
+            "name": "PaperworkMissing",
+            "dataType": "boolean",
+            "sourceColumn": "PaperworkMissing"
+          },
+          {
+            "name": "Witness",
+            "dataType": "string",
+            "sourceColumn": "Witness"
+          },
+          {
+            "name": "DatePerformed",
+            "dataType": "dateTime",
+            "sourceColumn": "DatePerformed"
+          },
+          {
+            "name": "Details",
+            "dataType": "string",
+            "sourceColumn": "Details"
+          },
+          {
+            "name": "Comments",
+            "dataType": "string",
+            "sourceColumn": "Comments"
+          },
+          {
+            "name": "image",
+            "dataType": "string",
+            "sourceColumn": "image"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/PPDC1SQL01\\PartsPlus;TF_WebApp_PartsControlBox\",",
+                "    dbo_tDriverSecurityChecks = Source{[Schema=\"dbo\",Item=\"tDriverSecurityChecks\"]}[Data]",
+                "in",
+                "    dbo_tDriverSecurityChecks"
+              ]
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "Today Checks",
+            "expression": " calculate(DISTINCTCOUNT(tDriverSecurityChecks[DriverID]),tDriverSecurityChecks[DatePerformed]>TODAY())+0"
+          },
+          {
+            "name": "Today Fails",
+            "expression": " CALCULATE(DISTINCTCOUNT(tDriverSecurityChecks[DriverID]),tDriverSecurityChecks[DatePerformed]>TODAY(),tDriverSecurityChecks[PaperworkMissing]=TRUE())+0"
+          },
+          {
+            "name": "Week Checks",
+            "expression": " calculate(DISTINCTCOUNT(tDriverSecurityChecks[DriverID]),tDriverSecurityChecks[DatePerformed]>TODAY()-WEEKDAY(TODAY(),3)-1)+0"
+          },
+          {
+            "name": "Week Fails",
+            "expression": " CALCULATE(DISTINCTCOUNT(tDriverSecurityChecks[DriverID]),tDriverSecurityChecks[DatePerformed]>TODAY()-WEEKDAY(TODAY(),3)-1,tDriverSecurityChecks[PaperworkMissing]=TRUE())+0"
+          },
+          {
+            "name": "Month Checks",
+            "expression": " CALCULATE(DISTINCTCOUNT(tDriverSecurityChecks[DriverID]),month(tDriverSecurityChecks[DatePerformed])=MONTH(TODAY()))+0"
+          },
+          {
+            "name": "Month Fails",
+            "expression": " CALCULATE(DISTINCTCOUNT(tDriverSecurityChecks[DriverID]),month(tDriverSecurityChecks[DatePerformed])=MONTH(TODAY()),tDriverSecurityChecks[PaperworkMissing]=TRUE())+0"
+          },
+          {
+            "name": "Year Fails",
+            "expression": " CALCULATE(DISTINCTCOUNT(tDriverSecurityChecks[DriverID]),year(tDriverSecurityChecks[DatePerformed])=YEAR(TODAY()),tDriverSecurityChecks[PaperworkMissing]=TRUE())+0"
           }
         ]
       }
