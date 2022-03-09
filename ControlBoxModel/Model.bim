@@ -89,17 +89,17 @@
           },
           {
             "name": "Available",
-            "dataType": "string",
+            "dataType": "int64",
             "sourceColumn": "Available"
           },
           {
             "name": "Vehicle",
-            "dataType": "string",
+            "dataType": "int64",
             "sourceColumn": "Vehicle"
           },
           {
             "name": "Forklift",
-            "dataType": "string",
+            "dataType": "int64",
             "sourceColumn": "Forklift"
           },
           {
@@ -130,11 +130,11 @@
           },
           {
             "name": "ForkliftAccess",
-            "expression": " if(isblank(countrows(filter(DriverStats,DriverStats[Forklift] = \"1\"))),0,countrows(filter(DriverStats,DriverStats[Forklift]=\"1\")))"
+            "expression": " if(isblank(countrows(filter(DriverStats,DriverStats[Forklift] = 1))),0,countrows(filter(DriverStats,DriverStats[Forklift]=1)))"
           },
           {
             "name": "ForkliftOff",
-            "expression": " if(isblank(CALCULATE(COUNTROWS(DriverStats),FILTER(DriverStats,DriverStats[Available]=\"0\" && DriverStats[Forklift]=\"1\"))),0,CALCULATE(COUNTROWS(DriverStats),FILTER(DriverStats,DriverStats[Available]=\"0\" && DriverStats[Forklift]=\"1\")))"
+            "expression": " if(isblank(CALCULATE(COUNTROWS(DriverStats),FILTER(DriverStats,DriverStats[Available]=0 && DriverStats[Forklift]=1))),0,CALCULATE(COUNTROWS(DriverStats),FILTER(DriverStats,DriverStats[Available]=0 && DriverStats[Forklift]=1)))"
           },
           {
             "name": "Temps",
@@ -142,11 +142,16 @@
           },
           {
             "name": "VanAccess",
-            "expression": " if(isblank(COUNTROWS(filter(DriverStats,DriverStats[Vehicle] = \"1\"))),0,countrows(filter(DriverStats,DriverStats[Vehicle] = \"1\")))"
+            "expression": " if(isblank(COUNTROWS(filter(DriverStats,DriverStats[Vehicle] = 1))),0,countrows(filter(DriverStats,DriverStats[Vehicle] = 1)))"
           },
           {
             "name": "VanOff",
-            "expression": " if(isblank(CALCULATE(COUNTROWS(DriverStats),filter(DriverStats,DriverStats[Available]=\"0\" && DriverStats[Vehicle]=\"1\"))),0,CALCULATE(COUNTROWS(DriverStats),filter(DriverStats,DriverStats[Available]=\"0\" && DriverStats[Vehicle]=\"1\")))"
+            "expression": " if(isblank(CALCULATE(COUNTROWS(DriverStats),filter(DriverStats,DriverStats[Available]=0 && DriverStats[Vehicle]=1))),0,CALCULATE(COUNTROWS(DriverStats),filter(DriverStats,DriverStats[Available]=0 && DriverStats[Vehicle]=1)))"
+          },
+          {
+            "name": "Driver Month Checks",
+            "expression": " if(CALCULATE(tDriverSecurityChecks[Month Checks])/counta(DriverStats[DriverID])*100=0,0,tDriverSecurityChecks[Month Checks]/CALCULATE(COUNTA(DriverStats[DriverID]),FILTER(DriverStats,DriverStats[Vehicle]=1)))",
+            "formatString": "0.00%;-0.00%;0.00%"
           }
         ]
       },
