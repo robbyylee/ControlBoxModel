@@ -3255,6 +3255,22 @@
         "toTable": "Regions",
         "toColumn": "SiteCode",
         "crossFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "5f7c19d6-2233-4775-8f88-3ec712ad24f4",
+        "fromTable": "vVehicleEachDayOfYear",
+        "fromColumn": "Date",
+        "toTable": "VI Dim Date",
+        "toColumn": "YYYY_MM_DD_slashSep",
+        "crossFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "6f0d4da6-557b-43a2-bb9b-426b3e4f51ea",
+        "fromTable": "vForkliftEachDayOfYear",
+        "fromColumn": "Date",
+        "toTable": "FI Dim Date",
+        "toColumn": "YYYY_MM_DD_slashSep",
+        "crossFilteringBehavior": "bothDirections"
       }
     ],
     "annotations": [
