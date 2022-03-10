@@ -2259,6 +2259,170 @@
             "expression": " CALCULATE(DISTINCTCOUNT(tFireAlarmInspectionLog[SerialNumber]),year(tFireAlarmInspectionLog[Checked])=YEAR(TODAY()),tFireAlarmInspectionLog[Status]=0)+0"
           }
         ]
+      },
+      {
+        "name": "tFirstAidConfig",
+        "columns": [
+          {
+            "name": "FirstAidID",
+            "dataType": "int64",
+            "sourceColumn": "FirstAidID"
+          },
+          {
+            "name": "Site",
+            "dataType": "string",
+            "sourceColumn": "Site"
+          },
+          {
+            "name": "Location",
+            "dataType": "string",
+            "sourceColumn": "Location"
+          },
+          {
+            "name": "SerialNumber",
+            "dataType": "string",
+            "sourceColumn": "SerialNumber"
+          },
+          {
+            "name": "Added",
+            "dataType": "dateTime",
+            "sourceColumn": "Added"
+          },
+          {
+            "name": "AddedBy",
+            "dataType": "string",
+            "sourceColumn": "AddedBy"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/PPDC1SQL01\\PartsPlus;TF_WebApp_PartsControlBox\",",
+                "    dbo_tFirstAidConfig = Source{[Schema=\"dbo\",Item=\"tFirstAidConfig\"]}[Data]",
+                "in",
+                "    dbo_tFirstAidConfig"
+              ]
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "First Aid Today checks",
+            "expression": " CALCULATE(tFirstAidInspectionLog[First Aid Month])/COUNTA(tFirstAidConfig[SerialNumber])+0",
+            "formatString": "0%;-0%;0%"
+          }
+        ]
+      },
+      {
+        "name": "tFirstAidInspectionLog",
+        "columns": [
+          {
+            "name": "InspectionID",
+            "dataType": "int64",
+            "sourceColumn": "InspectionID"
+          },
+          {
+            "name": "FirstAidID",
+            "dataType": "string",
+            "sourceColumn": "FirstAidID"
+          },
+          {
+            "name": "Status",
+            "dataType": "int64",
+            "sourceColumn": "Status"
+          },
+          {
+            "name": "Comment",
+            "dataType": "string",
+            "sourceColumn": "Comment"
+          },
+          {
+            "name": "CheckedBy",
+            "dataType": "string",
+            "sourceColumn": "CheckedBy"
+          },
+          {
+            "name": "Checked",
+            "dataType": "dateTime",
+            "sourceColumn": "Checked"
+          },
+          {
+            "name": "LastServiced",
+            "dataType": "dateTime",
+            "sourceColumn": "LastServiced"
+          },
+          {
+            "name": "Site",
+            "dataType": "string",
+            "sourceColumn": "Site"
+          },
+          {
+            "name": "SerialNumber",
+            "dataType": "string",
+            "sourceColumn": "SerialNumber"
+          },
+          {
+            "name": "Expired",
+            "dataType": "boolean",
+            "sourceColumn": "Expired"
+          },
+          {
+            "name": "image",
+            "dataType": "string",
+            "sourceColumn": "image"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/PPDC1SQL01\\PartsPlus;TF_WebApp_PartsControlBox\",",
+                "    dbo_tFirstAidInspectionLog = Source{[Schema=\"dbo\",Item=\"tFirstAidInspectionLog\"]}[Data]",
+                "in",
+                "    dbo_tFirstAidInspectionLog"
+              ]
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "First Aid Today",
+            "expression": " calculate(DISTINCTCOUNT(tFirstAidInspectionLog[SerialNumber]),tFirstAidInspectionLog[Checked]>TODAY())+0"
+          },
+          {
+            "name": "FA Day Fails",
+            "expression": " CALCULATE(DISTINCTCOUNT(tFirstAidInspectionLog[SerialNumber]),tFirstAidInspectionLog[Checked]>TODAY(),tFirstAidInspectionLog[Status]=0)+0"
+          },
+          {
+            "name": "First Aid Week",
+            "expression": " calculate(DISTINCTCOUNT(tFirstAidInspectionLog[SerialNumber]),tFirstAidInspectionLog[Checked]>TODAY()-WEEKDAY(TODAY(),3)-1)+0"
+          },
+          {
+            "name": "FA Week Fails",
+            "expression": " CALCULATE(DISTINCTCOUNT(tFirstAidInspectionLog[SerialNumber]),tFirstAidInspectionLog[Checked]>TODAY()-WEEKDAY(TODAY(),3)-1,tFirstAidInspectionLog[Status]=0)+0"
+          },
+          {
+            "name": "First Aid Month",
+            "expression": " CALCULATE(DISTINCTCOUNT(tFirstAidInspectionLog[SerialNumber]),month(tFirstAidInspectionLog[Checked])=MONTH(TODAY()))+0"
+          },
+          {
+            "name": "FA Month Fails",
+            "expression": " CALCULATE(DISTINCTCOUNT(tFirstAidInspectionLog[SerialNumber]),month(tFirstAidInspectionLog[Checked])=MONTH(TODAY()),tFirstAidInspectionLog[Status]=0)+0"
+          },
+          {
+            "name": "FA Year Fails",
+            "expression": " CALCULATE(DISTINCTCOUNT(tFirstAidInspectionLog[SerialNumber]),year(tFirstAidInspectionLog[Checked])=YEAR(TODAY()),tFirstAidInspectionLog[Status]=0)+0"
+          }
+        ]
       }
     ],
     "annotations": [
