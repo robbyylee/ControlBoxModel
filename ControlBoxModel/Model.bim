@@ -2423,6 +2423,165 @@
             "expression": " CALCULATE(DISTINCTCOUNT(tFirstAidInspectionLog[SerialNumber]),year(tFirstAidInspectionLog[Checked])=YEAR(TODAY()),tFirstAidInspectionLog[Status]=0)+0"
           }
         ]
+      },
+      {
+        "name": "tCO2Config",
+        "columns": [
+          {
+            "name": "Co2ID",
+            "dataType": "int64",
+            "sourceColumn": "Co2ID"
+          },
+          {
+            "name": "Site",
+            "dataType": "string",
+            "sourceColumn": "Site"
+          },
+          {
+            "name": "Location",
+            "dataType": "string",
+            "sourceColumn": "Location"
+          },
+          {
+            "name": "SerialNumber",
+            "dataType": "string",
+            "sourceColumn": "SerialNumber"
+          },
+          {
+            "name": "Added",
+            "dataType": "dateTime",
+            "sourceColumn": "Added"
+          },
+          {
+            "name": "AddedBy",
+            "dataType": "string",
+            "sourceColumn": "AddedBy"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/PPDC1SQL01\\PartsPlus;TF_WebApp_PartsControlBox\",",
+                "    dbo_tCO2Config = Source{[Schema=\"dbo\",Item=\"tCO2Config\"]}[Data]",
+                "in",
+                "    dbo_tCO2Config"
+              ]
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "CO2 Month Checks",
+            "expression": " CALCULATE(tCO2InspectionLog[CO2 Month])/count(tCO2Config[SerialNumber])+0",
+            "formatString": "0%;-0%;0%"
+          }
+        ]
+      },
+      {
+        "name": "tCO2InspectionLog",
+        "columns": [
+          {
+            "name": "CO2InspectionID",
+            "dataType": "int64",
+            "sourceColumn": "CO2InspectionID"
+          },
+          {
+            "name": "CO2ID",
+            "dataType": "int64",
+            "sourceColumn": "CO2ID"
+          },
+          {
+            "name": "Status",
+            "dataType": "boolean",
+            "sourceColumn": "Status"
+          },
+          {
+            "name": "Site",
+            "dataType": "string",
+            "sourceColumn": "Site"
+          },
+          {
+            "name": "Comment",
+            "dataType": "string",
+            "sourceColumn": "Comment"
+          },
+          {
+            "name": "Added",
+            "dataType": "dateTime",
+            "sourceColumn": "Added"
+          },
+          {
+            "name": "AddedBy",
+            "dataType": "string",
+            "sourceColumn": "AddedBy"
+          },
+          {
+            "name": "Location",
+            "dataType": "string",
+            "sourceColumn": "Location"
+          },
+          {
+            "name": "SerialNumber",
+            "dataType": "string",
+            "sourceColumn": "SerialNumber"
+          },
+          {
+            "name": "image",
+            "dataType": "string",
+            "sourceColumn": "image"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/PPDC1SQL01\\PartsPlus;TF_WebApp_PartsControlBox\",",
+                "    dbo_tCO2InspectionLog = Source{[Schema=\"dbo\",Item=\"tCO2InspectionLog\"]}[Data]",
+                "in",
+                "    dbo_tCO2InspectionLog"
+              ]
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "CO2 Today",
+            "expression": " calculate(DISTINCTCOUNT(tCO2InspectionLog[SerialNumber]),tCO2InspectionLog[Added]>TODAY())+0"
+          },
+          {
+            "name": "CO2 Today Fails",
+            "expression": " CALCULATE(DISTINCTCOUNT(tCO2InspectionLog[SerialNumber]),tCO2InspectionLog[Added]>TODAY(),tCO2InspectionLog[Status]=FALSE())+0"
+          },
+          {
+            "name": "CO2 Week",
+            "expression": " calculate(DISTINCTCOUNT(tCO2InspectionLog[SerialNumber]),tCO2InspectionLog[Added]>TODAY()-WEEKDAY(TODAY(),3)-1)+0"
+          },
+          {
+            "name": "CO2 Week Fails",
+            "expression": " CALCULATE(DISTINCTCOUNT(tCO2InspectionLog[SerialNumber]),tCO2InspectionLog[Added]>TODAY()-WEEKDAY(TODAY(),3)-1,tCO2InspectionLog[Status]=FALSE())+0"
+          },
+          {
+            "name": "CO2 Month",
+            "expression": " CALCULATE(DISTINCTCOUNT(tCO2InspectionLog[SerialNumber]),month(tCO2InspectionLog[Added])=MONTH(TODAY()))+0"
+          },
+          {
+            "name": "CO2 Month Fails",
+            "expression": " CALCULATE(DISTINCTCOUNT(tCO2InspectionLog[SerialNumber]),month(tCO2InspectionLog[Added])=MONTH(TODAY()),tCO2InspectionLog[Status]=FALSE())+0"
+          },
+          {
+            "name": "CO2 Year Fails",
+            "expression": " CALCULATE(DISTINCTCOUNT(tCO2InspectionLog[SerialNumber]),year(tCO2InspectionLog[Added])=YEAR(TODAY()),tCO2InspectionLog[Status]=FALSE())+0"
+          }
+        ]
       }
     ],
     "annotations": [
