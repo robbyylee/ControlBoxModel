@@ -2100,6 +2100,165 @@
             "expression": " CALCULATE(DISTINCTCOUNT(tDriverSecurityChecks[DriverID]),year(tDriverSecurityChecks[DatePerformed])=YEAR(TODAY()),tDriverSecurityChecks[PaperworkMissing]=TRUE())+0"
           }
         ]
+      },
+      {
+        "name": "tFireAlarmConfig",
+        "columns": [
+          {
+            "name": "FireAlarmID",
+            "dataType": "int64",
+            "sourceColumn": "FireAlarmID"
+          },
+          {
+            "name": "Site",
+            "dataType": "string",
+            "sourceColumn": "Site"
+          },
+          {
+            "name": "Location",
+            "dataType": "string",
+            "sourceColumn": "Location"
+          },
+          {
+            "name": "SerialNumber",
+            "dataType": "string",
+            "sourceColumn": "SerialNumber"
+          },
+          {
+            "name": "Added",
+            "dataType": "dateTime",
+            "sourceColumn": "Added"
+          },
+          {
+            "name": "AddedBy",
+            "dataType": "string",
+            "sourceColumn": "AddedBy"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/PPDC1SQL01\\PartsPlus;TF_WebApp_PartsControlBox\",",
+                "    dbo_tFireAlarmConfig = Source{[Schema=\"dbo\",Item=\"tFireAlarmConfig\"]}[Data]",
+                "in",
+                "    dbo_tFireAlarmConfig"
+              ]
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "Fire Alarm Checks",
+            "expression": " CALCULATE(tFireAlarmInspectionLog[Fire Month Checks])/count(tFireAlarmConfig[SerialNumber])+0",
+            "formatString": "0%;-0%;0%"
+          }
+        ]
+      },
+      {
+        "name": "tFireAlarmInspectionLog",
+        "columns": [
+          {
+            "name": "InspectionID",
+            "dataType": "int64",
+            "sourceColumn": "InspectionID"
+          },
+          {
+            "name": "FireAlarmID",
+            "dataType": "string",
+            "sourceColumn": "FireAlarmID"
+          },
+          {
+            "name": "Status",
+            "dataType": "int64",
+            "sourceColumn": "Status"
+          },
+          {
+            "name": "Comment",
+            "dataType": "string",
+            "sourceColumn": "Comment"
+          },
+          {
+            "name": "CheckedBy",
+            "dataType": "string",
+            "sourceColumn": "CheckedBy"
+          },
+          {
+            "name": "Checked",
+            "dataType": "dateTime",
+            "sourceColumn": "Checked"
+          },
+          {
+            "name": "LastServiced",
+            "dataType": "dateTime",
+            "sourceColumn": "LastServiced"
+          },
+          {
+            "name": "Site",
+            "dataType": "string",
+            "sourceColumn": "Site"
+          },
+          {
+            "name": "SerialNumber",
+            "dataType": "string",
+            "sourceColumn": "SerialNumber"
+          },
+          {
+            "name": "image",
+            "dataType": "string",
+            "sourceColumn": "image"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/PPDC1SQL01\\PartsPlus;TF_WebApp_PartsControlBox\",",
+                "    dbo_tFireAlarmInspectionLog = Source{[Schema=\"dbo\",Item=\"tFireAlarmInspectionLog\"]}[Data]",
+                "in",
+                "    dbo_tFireAlarmInspectionLog"
+              ]
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "Fire Today Checks",
+            "expression": " calculate(DISTINCTCOUNT(tFireAlarmInspectionLog[SerialNumber]),tFireAlarmInspectionLog[Checked]>TODAY())+0"
+          },
+          {
+            "name": "Fire Day Fails",
+            "expression": " CALCULATE(DISTINCTCOUNT(tFireAlarmInspectionLog[SerialNumber]),tFireAlarmInspectionLog[Checked]>TODAY(),tFireAlarmInspectionLog[Status]=0)+0"
+          },
+          {
+            "name": "Fire Week Checks",
+            "expression": " calculate(DISTINCTCOUNT(tFireAlarmInspectionLog[SerialNumber]),tFireAlarmInspectionLog[Checked]>TODAY()-WEEKDAY(TODAY(),3)-1)+0"
+          },
+          {
+            "name": "Fire Week Fails",
+            "expression": " CALCULATE(DISTINCTCOUNT(tFireAlarmInspectionLog[SerialNumber]),tFireAlarmInspectionLog[Checked]>TODAY()-WEEKDAY(TODAY(),3)-1,tFireAlarmInspectionLog[Status]=0)+0"
+          },
+          {
+            "name": "Fire Month Checks",
+            "expression": " CALCULATE(DISTINCTCOUNT(tFireAlarmInspectionLog[SerialNumber]),month(tFireAlarmInspectionLog[Checked])=MONTH(TODAY()))+0"
+          },
+          {
+            "name": "Fire Month Fails",
+            "expression": " CALCULATE(DISTINCTCOUNT(tFireAlarmInspectionLog[SerialNumber]),month(tFireAlarmInspectionLog[Checked])=MONTH(TODAY()),tFireAlarmInspectionLog[Status]=0)+0"
+          },
+          {
+            "name": "Fire Year Fails",
+            "expression": " CALCULATE(DISTINCTCOUNT(tFireAlarmInspectionLog[SerialNumber]),year(tFireAlarmInspectionLog[Checked])=YEAR(TODAY()),tFireAlarmInspectionLog[Status]=0)+0"
+          }
+        ]
       }
     ],
     "annotations": [
