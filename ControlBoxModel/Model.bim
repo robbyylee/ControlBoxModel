@@ -3113,6 +3113,141 @@
         ]
       }
     ],
+    "relationships": [
+      {
+        "name": "0890c4b5-9663-438a-bba3-9317f4f3bcbd",
+        "fromTable": "DriverStats",
+        "fromColumn": "Site",
+        "toTable": "tSiteConfig",
+        "toColumn": "SiteCode"
+      },
+      {
+        "name": "c180bae8-4633-44a7-8656-a104ad22eb36",
+        "fromTable": "ForkliftStats",
+        "fromColumn": "site",
+        "toTable": "tSiteConfig",
+        "toColumn": "SiteCode"
+      },
+      {
+        "name": "db375bff-07e3-4cd6-abba-70716c38f60b",
+        "fromTable": "H&SEachDayOfYear",
+        "fromColumn": "SiteName",
+        "toTable": "tSiteConfig",
+        "toColumn": "SiteCode"
+      },
+      {
+        "name": "ea5ecc68-ac75-4bba-bee8-202eb56ecb45",
+        "fromTable": "MOT & Services",
+        "fromColumn": "Site",
+        "toTable": "tSiteConfig",
+        "toColumn": "SiteCode"
+      },
+      {
+        "name": "84f0397f-4eef-49d7-a65e-8b68265bc039",
+        "fromTable": "ReportEachDayOfYear",
+        "fromColumn": "SiteName",
+        "toTable": "tSiteConfig",
+        "toColumn": "SiteCode"
+      },
+      {
+        "name": "930842ef-ddc9-443a-9f8c-b0642d64b528",
+        "fromTable": "tCO2Config",
+        "fromColumn": "Site",
+        "toTable": "tSiteConfig",
+        "toColumn": "SiteCode"
+      },
+      {
+        "name": "86f5b48d-9360-4e9a-a981-1f8e0d243710",
+        "fromTable": "tCO2InspectionLog",
+        "fromColumn": "Site",
+        "toTable": "tSiteConfig",
+        "toColumn": "SiteCode"
+      },
+      {
+        "name": "e6f79225-95f5-4263-995b-8bd8a00172d5",
+        "fromTable": "tDriverSecurityChecks",
+        "fromColumn": "Site",
+        "toTable": "tSiteConfig",
+        "toColumn": "SiteCode"
+      },
+      {
+        "name": "d3e3f870-ab32-4f8b-9773-7956f0b3f8cd",
+        "fromTable": "tFireAlarmConfig",
+        "fromColumn": "Site",
+        "toTable": "tSiteConfig",
+        "toColumn": "SiteCode"
+      },
+      {
+        "name": "a9471055-1014-4072-847c-664ef1b9f5f9",
+        "fromTable": "tFireAlarmInspectionLog",
+        "fromColumn": "Site",
+        "toTable": "tSiteConfig",
+        "toColumn": "SiteCode"
+      },
+      {
+        "name": "1ee869da-8a51-42dc-9d84-699a8693692b",
+        "fromTable": "tFirstAidConfig",
+        "fromColumn": "Added",
+        "toTable": "tSiteConfig",
+        "toColumn": "SiteCode"
+      },
+      {
+        "name": "d235e828-21b7-4228-adad-0c858cda4f6f",
+        "fromTable": "tFirstAidInspectionLog",
+        "fromColumn": "Site",
+        "toTable": "tSiteConfig",
+        "toColumn": "SiteCode"
+      },
+      {
+        "name": "194751f1-d74a-4d94-a769-1a4a6f8ed6da",
+        "fromTable": "tLadderConfig",
+        "fromColumn": "Site",
+        "toTable": "tSiteConfig",
+        "toColumn": "SiteCode"
+      },
+      {
+        "name": "1cbfb4b9-8345-48a5-b2b9-767dbc12feb4",
+        "fromTable": "tLadderInspectionLog",
+        "fromColumn": "Site",
+        "toTable": "tSiteConfig",
+        "toColumn": "SiteCode"
+      },
+      {
+        "name": "8754624d-931c-4984-a5d6-a05111bd6246",
+        "fromTable": "tVOR_Forklift",
+        "fromColumn": "Site",
+        "toTable": "tSiteConfig",
+        "toColumn": "SiteCode"
+      },
+      {
+        "name": "ded13e3c-2a72-4479-8dcd-3873f09ed6dd",
+        "fromTable": "tVOR_Vehicle",
+        "fromColumn": "Site",
+        "toTable": "tSiteConfig",
+        "toColumn": "SiteCode"
+      },
+      {
+        "name": "15b98999-62e6-4544-8bb7-909449b28032",
+        "fromTable": "VehicleStats",
+        "fromColumn": "Site",
+        "toTable": "tSiteConfig",
+        "toColumn": "SiteCode"
+      },
+      {
+        "name": "a2259eff-9059-4398-b946-40102f88eee9",
+        "fromTable": "vForkliftEachDayOfYear",
+        "fromColumn": "Site",
+        "toTable": "tSiteConfig",
+        "toColumn": "SiteCode"
+      },
+      {
+        "name": "4339f8ba-76e4-45dc-8051-19192c065107",
+        "fromTable": "vVehicleEachDayOfYear",
+        "fromColumn": "Site",
+        "toTable": "tSiteConfig",
+        "toColumn": "SiteCode"
+      }
+    ],
     "annotations": [
       {
         "name": "ClientCompatibilityLevel",
