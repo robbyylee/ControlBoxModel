@@ -2582,6 +2582,180 @@
             "expression": " CALCULATE(DISTINCTCOUNT(tCO2InspectionLog[SerialNumber]),year(tCO2InspectionLog[Added])=YEAR(TODAY()),tCO2InspectionLog[Status]=FALSE())+0"
           }
         ]
+      },
+      {
+        "name": "tLadderConfig",
+        "columns": [
+          {
+            "name": "LadderID",
+            "dataType": "int64",
+            "sourceColumn": "LadderID"
+          },
+          {
+            "name": "Site",
+            "dataType": "string",
+            "sourceColumn": "Site"
+          },
+          {
+            "name": "Location",
+            "dataType": "string",
+            "sourceColumn": "Location"
+          },
+          {
+            "name": "Type",
+            "dataType": "string",
+            "sourceColumn": "Type"
+          },
+          {
+            "name": "Added",
+            "dataType": "dateTime",
+            "sourceColumn": "Added"
+          },
+          {
+            "name": "AddedBy",
+            "dataType": "string",
+            "sourceColumn": "AddedBy"
+          },
+          {
+            "name": "Quarantined",
+            "dataType": "string",
+            "sourceColumn": "Quarantined"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/PPDC1SQL01\\PartsPlus;TF_WebApp_PartsControlBox\",",
+                "    dbo_tLadderConfig = Source{[Schema=\"dbo\",Item=\"tLadderConfig\"]}[Data]",
+                "in",
+                "    dbo_tLadderConfig"
+              ]
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "Ladder Month Checks",
+            "expression": " CALCULATE(tLadderInspectionLog[Ladder Month])/count(tLadderConfig[LadderID])+0",
+            "formatString": "0%;-0%;0%"
+          }
+        ]
+      },
+      {
+        "name": "tLadderInspectionLog",
+        "columns": [
+          {
+            "name": "InspectionID",
+            "dataType": "int64",
+            "sourceColumn": "InspectionID"
+          },
+          {
+            "name": "LadderID",
+            "dataType": "int64",
+            "sourceColumn": "LadderID"
+          },
+          {
+            "name": "Status",
+            "dataType": "string",
+            "sourceColumn": "Status"
+          },
+          {
+            "name": "Site",
+            "dataType": "string",
+            "sourceColumn": "Site"
+          },
+          {
+            "name": "Comment",
+            "dataType": "string",
+            "sourceColumn": "Comment"
+          },
+          {
+            "name": "QuarantinedStart",
+            "dataType": "string",
+            "sourceColumn": "QuarantinedStart"
+          },
+          {
+            "name": "QuarantinedEnd",
+            "dataType": "dateTime",
+            "sourceColumn": "QuarantinedEnd"
+          },
+          {
+            "name": "Added",
+            "dataType": "dateTime",
+            "sourceColumn": "Added"
+          },
+          {
+            "name": "AddedBy",
+            "dataType": "string",
+            "sourceColumn": "AddedBy"
+          },
+          {
+            "name": "type",
+            "dataType": "string",
+            "sourceColumn": "type"
+          },
+          {
+            "name": "location",
+            "dataType": "string",
+            "sourceColumn": "location"
+          },
+          {
+            "name": "image",
+            "dataType": "string",
+            "sourceColumn": "image"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/PPDC1SQL01\\PartsPlus;TF_WebApp_PartsControlBox\",",
+                "    dbo_tLadderInspectionLog = Source{[Schema=\"dbo\",Item=\"tLadderInspectionLog\"]}[Data]",
+                "in",
+                "    dbo_tLadderInspectionLog"
+              ]
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "Ladder Today",
+            "expression": " calculate(DISTINCTCOUNT(tLadderInspectionLog[LadderID]),tLadderInspectionLog[Added]>TODAY())+0"
+          },
+          {
+            "name": "Ladder Today Fails",
+            "expression": " CALCULATE(DISTINCTCOUNT(tLadderInspectionLog[LadderID]),tLadderInspectionLog[Added]>TODAY(),tLadderInspectionLog[Status]=\"0\")+0"
+          },
+          {
+            "name": "Ladder Week",
+            "expression": " calculate(DISTINCTCOUNT(tLadderInspectionLog[LadderID]),tLadderInspectionLog[Added]>TODAY()-WEEKDAY(TODAY(),3)-1)+0"
+          },
+          {
+            "name": "Ladder Week Fails",
+            "expression": " CALCULATE(DISTINCTCOUNT(tLadderInspectionLog[LadderID]),tLadderInspectionLog[Added]>TODAY()-WEEKDAY(TODAY(),3)-1,tLadderInspectionLog[Status]=\"0\")+0"
+          },
+          {
+            "name": "Ladder Month",
+            "expression": " CALCULATE(DISTINCTCOUNT(tLadderInspectionLog[LadderID]),month(tLadderInspectionLog[Added])=MONTH(TODAY()))+0"
+          },
+          {
+            "name": "Ladder Month Fails",
+            "expression": " CALCULATE(DISTINCTCOUNT(tLadderInspectionLog[LadderID]),month(tLadderInspectionLog[Added])=MONTH(TODAY()),tLadderInspectionLog[Status]=\"0\")+0"
+          },
+          {
+            "name": "Ladder Year Fails",
+            "expression": " CALCULATE(DISTINCTCOUNT(tLadderInspectionLog[LadderID]),year(tLadderInspectionLog[Added])=YEAR(TODAY()),tLadderInspectionLog[Status]=\"0\")+0"
+          }
+        ]
       }
     ],
     "annotations": [
