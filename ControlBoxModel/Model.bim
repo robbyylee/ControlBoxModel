@@ -3246,6 +3246,15 @@
         "fromColumn": "Site",
         "toTable": "tSiteConfig",
         "toColumn": "SiteCode"
+      },
+      {
+        "name": "e5362f76-fab4-495a-bac9-975a5f7b9a2e",
+        "fromCardinality": "one",
+        "fromTable": "tSiteConfig",
+        "fromColumn": "SiteCode",
+        "toTable": "Regions",
+        "toColumn": "SiteCode",
+        "crossFilteringBehavior": "bothDirections"
       }
     ],
     "annotations": [
