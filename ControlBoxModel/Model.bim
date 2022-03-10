@@ -2756,6 +2756,361 @@
             "expression": " CALCULATE(DISTINCTCOUNT(tLadderInspectionLog[LadderID]),year(tLadderInspectionLog[Added])=YEAR(TODAY()),tLadderInspectionLog[Status]=\"0\")+0"
           }
         ]
+      },
+      {
+        "name": "ReportEachDayOfYear",
+        "columns": [
+          {
+            "name": "Date",
+            "dataType": "string",
+            "sourceColumn": "Date"
+          },
+          {
+            "name": "RepName",
+            "dataType": "string",
+            "sourceColumn": "RepName"
+          },
+          {
+            "name": "SiteName",
+            "dataType": "string",
+            "sourceColumn": "SiteName"
+          },
+          {
+            "type": "calculated",
+            "name": "ReportCheck",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "expression": " IF(LOOKUPVALUE(tReportLog[ReportName],tReportLog[ReportName],'ReportEachDayOfYear'[RepName],tReportLog[Site],'ReportEachDayOfYear'[SiteName],tReportLog[Month],MONTH('ReportEachDayOfYear'[Date]),tReportLog[YearComplete],YEAR('ReportEachDayOfYear'[Date]))<>BLANK(),1,0)"
+          },
+          {
+            "type": "calculated",
+            "name": "MonthNum",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "expression": " MONTH('ReportEachDayOfYear'[Date])"
+          },
+          {
+            "type": "calculated",
+            "name": "MonthName",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": " IF('ReportEachDayOfYear'[MonthNum]=1,\"Jan\",IF('ReportEachDayOfYear'[MonthNum]=2,\"Feb\",IF('ReportEachDayOfYear'[MonthNum]=3,\"Mar\",IF('ReportEachDayOfYear'[MonthNum]=4,\"Apr\",IF('ReportEachDayOfYear'[MonthNum]=5,\"May\",IF('ReportEachDayOfYear'[MonthNum]=6,\"Jun\",IF('ReportEachDayOfYear'[MonthNum]=7,\"Jul\",IF('ReportEachDayOfYear'[MonthNum]=8,\"Aug\",IF('ReportEachDayOfYear'[MonthNum]=9,\"Sep\",IF('ReportEachDayOfYear'[MonthNum]=10,\"Oct\",IF('ReportEachDayOfYear'[MonthNum]=11,\"Nov\",\"Dec\")))))))))))"
+          },
+          {
+            "type": "calculated",
+            "name": "Status",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": " IF(MONTH('ReportEachDayOfYear'[Date])>MONTH(TODAY()),\"https://bit.ly/3r1Re8l\",IF('ReportEachDayOfYear'[ReportCheck]=1,\"https://bit.ly/3tXuVmh\", \"https://bit.ly/34c36eX\"))",
+            "dataCategory": "ImageUrl"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/PPDC1SQL01\\PartsPlus;TF_WebApp_PartsControlBox\",",
+                "    #\"dbo_'ReportEachDayOfYear\" = Source{[Schema=\"dbo\",Item=\"'ReportEachDayOfYear\"]}[Data]",
+                "in",
+                "    #\"dbo_'ReportEachDayOfYear\""
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "tReportLog",
+        "columns": [
+          {
+            "name": "ID",
+            "dataType": "int64",
+            "sourceColumn": "ID"
+          },
+          {
+            "name": "ReportID",
+            "dataType": "int64",
+            "sourceColumn": "ReportID"
+          },
+          {
+            "name": "ReportName",
+            "dataType": "string",
+            "sourceColumn": "ReportName"
+          },
+          {
+            "name": "File",
+            "dataType": "string",
+            "sourceColumn": "File"
+          },
+          {
+            "name": "FileMonth",
+            "dataType": "string",
+            "sourceColumn": "FileMonth"
+          },
+          {
+            "name": "Site",
+            "dataType": "string",
+            "sourceColumn": "Site"
+          },
+          {
+            "name": "Comment",
+            "dataType": "string",
+            "sourceColumn": "Comment"
+          },
+          {
+            "name": "UploadedBy",
+            "dataType": "string",
+            "sourceColumn": "UploadedBy"
+          },
+          {
+            "name": "UploadedDate",
+            "dataType": "dateTime",
+            "sourceColumn": "UploadedDate"
+          },
+          {
+            "name": "Confirmation",
+            "dataType": "boolean",
+            "sourceColumn": "Confirmation"
+          },
+          {
+            "type": "calculated",
+            "name": "Month",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "expression": " IF(tReportLog[FileMonth]=\"Jan\",1,IF(tReportLog[FileMonth]=\"Feb\",2,IF(tReportLog[FileMonth]=\"Mar\",3,IF(tReportLog[FileMonth]=\"Apr\",4,IF(tReportLog[FileMonth]=\"May\",5,IF(tReportLog[FileMonth]=\"Jun\",6,IF(tReportLog[FileMonth]=\"July\",7,IF(tReportLog[FileMonth]=\"Aug\",8,IF(tReportLog[FileMonth]=\"Sept\",9,IF(tReportLog[FileMonth]=\"Oct\",10,IF(tReportLog[FileMonth]=\"Nov\",11,12)))))))))))"
+          },
+          {
+            "type": "calculated",
+            "name": "YearComplete",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "expression": " IF(tReportLog[FileMonth]=\"Dec\"&&MONTH(tReportLog[UploadedDate])=1,YEAR(tReportLog[UploadedDate])-1,YEAR(tReportLog[UploadedDate]))"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/PPDC1SQL01\\PartsPlus;TF_WebApp_PartsControlBox\",",
+                "    dbo_tReportLog = Source{[Schema=\"dbo\",Item=\"tReportLog\"]}[Data]",
+                "in",
+                "    dbo_tReportLog"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "H&SEachDayOfYear",
+        "columns": [
+          {
+            "name": "Date",
+            "dataType": "string",
+            "sourceColumn": "Date"
+          },
+          {
+            "name": "SiteName",
+            "dataType": "string",
+            "sourceColumn": "SiteName"
+          },
+          {
+            "type": "calculated",
+            "name": "H&SCheck",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "expression": " IF(LOOKUPVALUE('tHealth&SafetyLog'[Site],'tHealth&SafetyLog'[Site],'H&SEachDayOfYear'[SiteName],'tHealth&SafetyLog'[MonthCompleted],MONTH('H&SEachDayOfYear'[Date]),'tHealth&SafetyLog'[YearCompleted],YEAR('H&SEachDayOfYear'[Date]))<>BLANK(),1,0)"
+          },
+          {
+            "type": "calculated",
+            "name": "MonthNum",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "expression": " MONTH('H&SEachDayOfYear'[Date])"
+          },
+          {
+            "type": "calculated",
+            "name": "MonthName",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": " IF('H&SEachDayOfYear'[MonthNum]=1,\"Jan\",IF('H&SEachDayOfYear'[MonthNum]=2,\"Feb\",IF('H&SEachDayOfYear'[MonthNum]=3,\"Mar\",IF('H&SEachDayOfYear'[MonthNum]=4,\"Apr\",IF('H&SEachDayOfYear'[MonthNum]=5,\"May\",IF('H&SEachDayOfYear'[MonthNum]=6,\"Jun\",IF('H&SEachDayOfYear'[MonthNum]=7,\"Jul\",IF('H&SEachDayOfYear'[MonthNum]=8,\"Aug\",IF('H&SEachDayOfYear'[MonthNum]=9,\"Sep\",IF('H&SEachDayOfYear'[MonthNum]=10,\"Oct\",IF('H&SEachDayOfYear'[MonthNum]=11,\"Nov\",\"Dec\")))))))))))"
+          },
+          {
+            "type": "calculated",
+            "name": "Status",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": " IF(MONTH('H&SEachDayOfYear'[Date])>MONTH(TODAY()),\"https://bit.ly/3r1Re8l\",IF('H&SEachDayOfYear'[H&SCheck]=1,\"https://bit.ly/3tXuVmh\",\"https://bit.ly/34c36eX\"))",
+            "dataCategory": "ImageUrl"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/PPDC1SQL01\\PartsPlus;TF_WebApp_PartsControlBox\",",
+                "    #\"dbo_H&SEachDayOfYear\" = Source{[Schema=\"dbo\",Item=\"H&SEachDayOfYear\"]}[Data]",
+                "in",
+                "    #\"dbo_H&SEachDayOfYear\""
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "tHealth&SafetyLog",
+        "columns": [
+          {
+            "name": "HealthID",
+            "dataType": "int64",
+            "sourceColumn": "HealthID"
+          },
+          {
+            "name": "Q1",
+            "dataType": "string",
+            "sourceColumn": "Q1"
+          },
+          {
+            "name": "Q2",
+            "dataType": "string",
+            "sourceColumn": "Q2"
+          },
+          {
+            "name": "Q3",
+            "dataType": "string",
+            "sourceColumn": "Q3"
+          },
+          {
+            "name": "Q4",
+            "dataType": "string",
+            "sourceColumn": "Q4"
+          },
+          {
+            "name": "Q5",
+            "dataType": "string",
+            "sourceColumn": "Q5"
+          },
+          {
+            "name": "Q6",
+            "dataType": "string",
+            "sourceColumn": "Q6"
+          },
+          {
+            "name": "Q7",
+            "dataType": "string",
+            "sourceColumn": "Q7"
+          },
+          {
+            "name": "Q8",
+            "dataType": "string",
+            "sourceColumn": "Q8"
+          },
+          {
+            "name": "Q9",
+            "dataType": "string",
+            "sourceColumn": "Q9"
+          },
+          {
+            "name": "Q10",
+            "dataType": "string",
+            "sourceColumn": "Q10"
+          },
+          {
+            "name": "Q11",
+            "dataType": "string",
+            "sourceColumn": "Q11"
+          },
+          {
+            "name": "Q12",
+            "dataType": "string",
+            "sourceColumn": "Q12"
+          },
+          {
+            "name": "Q13",
+            "dataType": "string",
+            "sourceColumn": "Q13"
+          },
+          {
+            "name": "Q14",
+            "dataType": "string",
+            "sourceColumn": "Q14"
+          },
+          {
+            "name": "Q15",
+            "dataType": "string",
+            "sourceColumn": "Q15"
+          },
+          {
+            "name": "Comments",
+            "dataType": "string",
+            "sourceColumn": "Comments"
+          },
+          {
+            "name": "Month",
+            "dataType": "string",
+            "sourceColumn": "Month"
+          },
+          {
+            "name": "Perfomed",
+            "dataType": "dateTime",
+            "sourceColumn": "Perfomed"
+          },
+          {
+            "name": "PerfomedBy",
+            "dataType": "string",
+            "sourceColumn": "PerfomedBy"
+          },
+          {
+            "name": "Site",
+            "dataType": "string",
+            "sourceColumn": "Site"
+          },
+          {
+            "name": "image",
+            "dataType": "string",
+            "sourceColumn": "image"
+          },
+          {
+            "type": "calculated",
+            "name": "MonthCompleted",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "expression": " IF('tHealth&SafetyLog'[Month]=\"January\",1,IF('tHealth&SafetyLog'[Month]=\"January 2022\",1,IF('tHealth&SafetyLog'[Month]=\"February\",2,IF('tHealth&SafetyLog'[Month]=\"February 2022\",2,IF('tHealth&SafetyLog'[Month]=\"March\",3,IF('tHealth&SafetyLog'[Month]=\"April\",4,IF('tHealth&SafetyLog'[Month]=\"May\",5,IF('tHealth&SafetyLog'[Month]=\"June\",6,IF('tHealth&SafetyLog'[Month]=\"July\",7,IF('tHealth&SafetyLog'[Month]=\"August\",8,IF('tHealth&SafetyLog'[Month]=\"September\",9,IF('tHealth&SafetyLog'[Month]=\"October\",10,IF('tHealth&SafetyLog'[Month]=\"November\",11,12)))))))))))))"
+          },
+          {
+            "type": "calculated",
+            "name": "YearCompleted",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "expression": " IF('tHealth&SafetyLog'[Month]=\"December\"&&MONTH('tHealth&SafetyLog'[Perfomed])=1,YEAR('tHealth&SafetyLog'[Perfomed])-1,YEAR('tHealth&SafetyLog'[Perfomed]))"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/PPDC1SQL01\\PartsPlus;TF_WebApp_PartsControlBox\",",
+                "    #\"dbo_tHealth&SafetyLog\" = Source{[Schema=\"dbo\",Item=\"tHealth&SafetyLog\"]}[Data]",
+                "in",
+                "    #\"dbo_tHealth&SafetyLog\""
+              ]
+            }
+          }
+        ]
       }
     ],
     "annotations": [
