@@ -721,7 +721,8 @@
             "name": "WeekDay",
             "dataType": "string",
             "isDataTypeInferred": true,
-            "expression": " FORMAT(vForkliftEachDayOfYear[Date],\"dddd\")"
+            "expression": " FORMAT(vForkliftEachDayOfYear[Date],\"dddd\")",
+            "sortByColumn": "WeekDayNum"
           },
           {
             "type": "calculated",
@@ -735,7 +736,8 @@
             "name": "Status",
             "dataType": "string",
             "isDataTypeInferred": true,
-            "expression": " IF(vForkliftEachDayOfYear[Date]>TODAY(),\"https://bit.ly/3r1Re8l\",IF(vForkliftEachDayOfYear[VOR]=1,\"https://bit.ly/3g0lQks\",IF(vForkliftEachDayOfYear[Inspect]=1,\"https://bit.ly/3tXuVmh\",\"https://bit.ly/34c36eX\")))"
+            "expression": " IF(vForkliftEachDayOfYear[Date]>TODAY(),\"https://bit.ly/3r1Re8l\",IF(vForkliftEachDayOfYear[VOR]=1,\"https://bit.ly/3g0lQks\",IF(vForkliftEachDayOfYear[Inspect]=1,\"https://bit.ly/3tXuVmh\",\"https://bit.ly/34c36eX\")))",
+            "dataCategory": "ImageUrl"
           }
         ],
         "partitions": [
@@ -824,7 +826,8 @@
             "name": "WeekDay",
             "dataType": "string",
             "isDataTypeInferred": true,
-            "expression": " FORMAT(vVehicleEachDayOfYear[Date],\"dddd\")"
+            "expression": " FORMAT(vVehicleEachDayOfYear[Date],\"dddd\")",
+            "sortByColumn": "WeekDayNum"
           },
           {
             "type": "calculated",
