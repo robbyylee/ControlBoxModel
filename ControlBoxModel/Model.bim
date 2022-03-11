@@ -151,7 +151,7 @@
           {
             "name": "Driver Month Checks",
             "expression": " if(CALCULATE(tDriverSecurityChecks[Month Checks])/counta(DriverStats[DriverID])*100=0,0,tDriverSecurityChecks[Month Checks]/CALCULATE(COUNTA(DriverStats[DriverID]),FILTER(DriverStats,DriverStats[Vehicle]=1)))",
-            "formatString": "0.00%;-0.00%;0.00%"
+            "formatString": "0%;-0%;0%"
           }
         ]
       },
@@ -2797,7 +2797,8 @@
             "name": "MonthName",
             "dataType": "string",
             "isDataTypeInferred": true,
-            "expression": " IF('ReportEachDayOfYear'[MonthNum]=1,\"Jan\",IF('ReportEachDayOfYear'[MonthNum]=2,\"Feb\",IF('ReportEachDayOfYear'[MonthNum]=3,\"Mar\",IF('ReportEachDayOfYear'[MonthNum]=4,\"Apr\",IF('ReportEachDayOfYear'[MonthNum]=5,\"May\",IF('ReportEachDayOfYear'[MonthNum]=6,\"Jun\",IF('ReportEachDayOfYear'[MonthNum]=7,\"Jul\",IF('ReportEachDayOfYear'[MonthNum]=8,\"Aug\",IF('ReportEachDayOfYear'[MonthNum]=9,\"Sep\",IF('ReportEachDayOfYear'[MonthNum]=10,\"Oct\",IF('ReportEachDayOfYear'[MonthNum]=11,\"Nov\",\"Dec\")))))))))))"
+            "expression": " IF('ReportEachDayOfYear'[MonthNum]=1,\"Jan\",IF('ReportEachDayOfYear'[MonthNum]=2,\"Feb\",IF('ReportEachDayOfYear'[MonthNum]=3,\"Mar\",IF('ReportEachDayOfYear'[MonthNum]=4,\"Apr\",IF('ReportEachDayOfYear'[MonthNum]=5,\"May\",IF('ReportEachDayOfYear'[MonthNum]=6,\"Jun\",IF('ReportEachDayOfYear'[MonthNum]=7,\"Jul\",IF('ReportEachDayOfYear'[MonthNum]=8,\"Aug\",IF('ReportEachDayOfYear'[MonthNum]=9,\"Sep\",IF('ReportEachDayOfYear'[MonthNum]=10,\"Oct\",IF('ReportEachDayOfYear'[MonthNum]=11,\"Nov\",\"Dec\")))))))))))",
+            "sortByColumn": "MonthNum"
           },
           {
             "type": "calculated",
@@ -2942,7 +2943,8 @@
             "name": "MonthName",
             "dataType": "string",
             "isDataTypeInferred": true,
-            "expression": " IF('H&SEachDayOfYear'[MonthNum]=1,\"Jan\",IF('H&SEachDayOfYear'[MonthNum]=2,\"Feb\",IF('H&SEachDayOfYear'[MonthNum]=3,\"Mar\",IF('H&SEachDayOfYear'[MonthNum]=4,\"Apr\",IF('H&SEachDayOfYear'[MonthNum]=5,\"May\",IF('H&SEachDayOfYear'[MonthNum]=6,\"Jun\",IF('H&SEachDayOfYear'[MonthNum]=7,\"Jul\",IF('H&SEachDayOfYear'[MonthNum]=8,\"Aug\",IF('H&SEachDayOfYear'[MonthNum]=9,\"Sep\",IF('H&SEachDayOfYear'[MonthNum]=10,\"Oct\",IF('H&SEachDayOfYear'[MonthNum]=11,\"Nov\",\"Dec\")))))))))))"
+            "expression": " IF('H&SEachDayOfYear'[MonthNum]=1,\"Jan\",IF('H&SEachDayOfYear'[MonthNum]=2,\"Feb\",IF('H&SEachDayOfYear'[MonthNum]=3,\"Mar\",IF('H&SEachDayOfYear'[MonthNum]=4,\"Apr\",IF('H&SEachDayOfYear'[MonthNum]=5,\"May\",IF('H&SEachDayOfYear'[MonthNum]=6,\"Jun\",IF('H&SEachDayOfYear'[MonthNum]=7,\"Jul\",IF('H&SEachDayOfYear'[MonthNum]=8,\"Aug\",IF('H&SEachDayOfYear'[MonthNum]=9,\"Sep\",IF('H&SEachDayOfYear'[MonthNum]=10,\"Oct\",IF('H&SEachDayOfYear'[MonthNum]=11,\"Nov\",\"Dec\")))))))))))",
+            "sortByColumn": "MonthNum"
           },
           {
             "type": "calculated",
