@@ -578,6 +578,18 @@
             "name": "ServiceNotSet",
             "dataType": "int64",
             "sourceColumn": "ServiceNotSet"
+          },
+          {
+            "name": "daysuntilnextservice",
+            "dataType": "string",
+            "sourceColumn": "daysuntilnextservice"
+          },
+          {
+            "type": "calculated",
+            "name": "Services",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": " IF('MOT & Services'[ServiceDue]=1,\"Service Due\",IF('MOT & Services'[ServiceMissed]=1,\"Service Missed\",IF('MOT & Services'[ServiceNotSet]=1,\"Service Not Set\")))"
           }
         ],
         "partitions": [
@@ -588,7 +600,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = Sql.Database(\"PPDC1SQL01\\PartsPlus\", \"TF_WebApp_PartsControlBox\", [Query=\"Select Site,#(lf)Registration,#(lf)Case When NextMOT > getdate() and NextMOT < getdate()+30 Then 1 Else 0 End as MOTDue,#(lf)Case When NextMOT < getdate() Then 1 Else 0 End MOTMissed,#(lf)Case When NextMOT is null Then 1 Else 0 End MOTNotSet,#(lf)Case When DaysUntilNextService >= 1 Then 1 Else 0 End ServiceDue,#(lf)Case When DaysUntilNextService = 0 Then 1 Else 0 End ServiceMissed,#(lf)Case When DaysUntilNextService is null Then 1 Else 0 End ServiceNotSet#(lf)from TF_WebApp_PartsControlBox.dbo.tVehicleConfig\"])",
+                "    Source = Sql.Database(\"PPDC1SQL01\\PartsPlus\", \"TF_WebApp_PartsControlBox\", [Query=\"Select Site,#(lf)Registration,#(lf)Case When NextMOT > getdate() and NextMOT < getdate()+30 Then 1 Else 0 End as MOTDue,#(lf)Case When NextMOT < getdate() Then 1 Else 0 End MOTMissed,#(lf)Case When NextMOT is null Then 1 Else 0 End MOTNotSet,#(lf)Case When DaysUntilNextService >= 1 Then 1 Else 0 End ServiceDue,#(lf)Case When DaysUntilNextService = 0 Then 1 Else 0 End ServiceMissed,#(lf)Case When DaysUntilNextService is null Then 1 Else 0 End ServiceNotSet, daysuntilnextservice #(lf)from TF_WebApp_PartsControlBox.dbo.tVehicleConfig\"])",
                 "in",
                 "    Source"
               ]
