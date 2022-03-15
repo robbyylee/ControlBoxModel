@@ -105,7 +105,8 @@
           {
             "name": "DriverID",
             "dataType": "int64",
-            "sourceColumn": "DriverID"
+            "sourceColumn": "DriverID",
+            "summarizeBy": "none"
           }
         ],
         "partitions": [
@@ -166,7 +167,8 @@
           {
             "name": "VehicleID",
             "dataType": "int64",
-            "sourceColumn": "VehicleID"
+            "sourceColumn": "VehicleID",
+            "summarizeBy": "none"
           },
           {
             "name": "Registration",
@@ -276,7 +278,8 @@
           {
             "name": "ForkliftID",
             "dataType": "int64",
-            "sourceColumn": "ForkliftID"
+            "sourceColumn": "ForkliftID",
+            "summarizeBy": "none"
           },
           {
             "name": "VOR",
@@ -383,7 +386,8 @@
           {
             "name": "VOR_ID",
             "dataType": "int64",
-            "sourceColumn": "VOR_ID"
+            "sourceColumn": "VOR_ID",
+            "summarizeBy": "none"
           },
           {
             "name": "Fleet",
@@ -465,7 +469,8 @@
           {
             "name": "VOR_ID",
             "dataType": "int64",
-            "sourceColumn": "VOR_ID"
+            "sourceColumn": "VOR_ID",
+            "summarizeBy": "none"
           },
           {
             "name": "Registration",
@@ -614,7 +619,8 @@
           {
             "name": "SiteID",
             "dataType": "int64",
-            "sourceColumn": "SiteID"
+            "sourceColumn": "SiteID",
+            "summarizeBy": "none"
           },
           {
             "name": "SiteCode",
@@ -705,7 +711,8 @@
           {
             "name": "VRM",
             "dataType": "int64",
-            "sourceColumn": "VRM"
+            "sourceColumn": "VRM",
+            "summarizeBy": "none"
           },
           {
             "type": "calculated",
@@ -741,7 +748,8 @@
             "name": "WeekDayNum",
             "dataType": "int64",
             "isDataTypeInferred": true,
-            "expression": " WEEKDAY(vForkliftEachDayOfYear[Date],2)"
+            "expression": " WEEKDAY(vForkliftEachDayOfYear[Date],2)",
+            "summarizeBy": "none"
           },
           {
             "type": "calculated",
@@ -873,12 +881,14 @@
           {
             "name": "ID",
             "dataType": "int64",
-            "sourceColumn": "ID"
+            "sourceColumn": "ID",
+            "summarizeBy": "none"
           },
           {
             "name": "VehicleID",
             "dataType": "int64",
-            "sourceColumn": "VehicleID"
+            "sourceColumn": "VehicleID",
+            "summarizeBy": "none"
           },
           {
             "name": "Registration",
@@ -1028,12 +1038,14 @@
           {
             "name": "VehicleInspectionID",
             "dataType": "int64",
-            "sourceColumn": "VehicleInspectionID"
+            "sourceColumn": "VehicleInspectionID",
+            "summarizeBy": "none"
           },
           {
             "name": "VehicleID",
             "dataType": "int64",
-            "sourceColumn": "VehicleID"
+            "sourceColumn": "VehicleID",
+            "summarizeBy": "none"
           },
           {
             "name": "Registration",
@@ -1250,12 +1262,14 @@
           {
             "name": "ForkLiftInspectionID",
             "dataType": "int64",
-            "sourceColumn": "ForkLiftInspectionID"
+            "sourceColumn": "ForkLiftInspectionID",
+            "summarizeBy": "none"
           },
           {
             "name": "ForkLiftID",
             "dataType": "int64",
-            "sourceColumn": "ForkLiftID"
+            "sourceColumn": "ForkLiftID",
+            "summarizeBy": "none"
           },
           {
             "name": "FleetNumber",
@@ -2844,12 +2858,14 @@
           {
             "name": "ID",
             "dataType": "int64",
-            "sourceColumn": "ID"
+            "sourceColumn": "ID",
+            "summarizeBy": "none"
           },
           {
             "name": "ReportID",
             "dataType": "int64",
-            "sourceColumn": "ReportID"
+            "sourceColumn": "ReportID",
+            "summarizeBy": "none"
           },
           {
             "name": "ReportName",
@@ -2948,7 +2964,8 @@
             "name": "MonthNum",
             "dataType": "int64",
             "isDataTypeInferred": true,
-            "expression": " MONTH('H&SEachDayOfYear'[Date])"
+            "expression": " MONTH('H&SEachDayOfYear'[Date])",
+            "summarizeBy": "none"
           },
           {
             "type": "calculated",
@@ -2990,7 +3007,8 @@
           {
             "name": "HealthID",
             "dataType": "int64",
-            "sourceColumn": "HealthID"
+            "sourceColumn": "HealthID",
+            "summarizeBy": "none"
           },
           {
             "name": "Q1",
