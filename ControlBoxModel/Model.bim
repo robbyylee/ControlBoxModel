@@ -972,12 +972,14 @@
           {
             "name": "id",
             "dataType": "int64",
-            "sourceColumn": "id"
+            "sourceColumn": "id",
+            "summarizeBy": "none"
           },
           {
             "name": "DriverID",
             "dataType": "int64",
-            "sourceColumn": "DriverID"
+            "sourceColumn": "DriverID",
+            "summarizeBy": "none"
           },
           {
             "name": "DriverUsername",
@@ -2025,7 +2027,8 @@
           {
             "name": "SecurityID",
             "dataType": "int64",
-            "sourceColumn": "SecurityID"
+            "sourceColumn": "SecurityID",
+            "summarizeBy": "none"
           },
           {
             "name": "Site",
@@ -2035,7 +2038,8 @@
           {
             "name": "DriverID",
             "dataType": "int64",
-            "sourceColumn": "DriverID"
+            "sourceColumn": "DriverID",
+            "summarizeBy": "none"
           },
           {
             "name": "DriverUsername",
@@ -2136,7 +2140,8 @@
           {
             "name": "FireAlarmID",
             "dataType": "int64",
-            "sourceColumn": "FireAlarmID"
+            "sourceColumn": "FireAlarmID",
+            "summarizeBy": "none"
           },
           {
             "name": "Site",
@@ -2194,7 +2199,8 @@
           {
             "name": "InspectionID",
             "dataType": "int64",
-            "sourceColumn": "InspectionID"
+            "sourceColumn": "InspectionID",
+            "summarizeBy": "none"
           },
           {
             "name": "FireAlarmID",
@@ -2204,7 +2210,8 @@
           {
             "name": "Status",
             "dataType": "int64",
-            "sourceColumn": "Status"
+            "sourceColumn": "Status",
+            "summarizeBy": "none"
           },
           {
             "name": "Comment",
@@ -2295,7 +2302,8 @@
           {
             "name": "FirstAidID",
             "dataType": "int64",
-            "sourceColumn": "FirstAidID"
+            "sourceColumn": "FirstAidID",
+            "summarizeBy": "none"
           },
           {
             "name": "Site",
@@ -2353,7 +2361,8 @@
           {
             "name": "InspectionID",
             "dataType": "int64",
-            "sourceColumn": "InspectionID"
+            "sourceColumn": "InspectionID",
+            "summarizeBy": "none"
           },
           {
             "name": "FirstAidID",
@@ -2363,7 +2372,8 @@
           {
             "name": "Status",
             "dataType": "int64",
-            "sourceColumn": "Status"
+            "sourceColumn": "Status",
+            "summarizeBy": "none"
           },
           {
             "name": "Comment",
@@ -2459,7 +2469,8 @@
           {
             "name": "Co2ID",
             "dataType": "int64",
-            "sourceColumn": "Co2ID"
+            "sourceColumn": "Co2ID",
+            "summarizeBy": "none"
           },
           {
             "name": "Site",
@@ -2517,12 +2528,14 @@
           {
             "name": "CO2InspectionID",
             "dataType": "int64",
-            "sourceColumn": "CO2InspectionID"
+            "sourceColumn": "CO2InspectionID",
+            "summarizeBy": "none"
           },
           {
             "name": "CO2ID",
             "dataType": "int64",
-            "sourceColumn": "CO2ID"
+            "sourceColumn": "CO2ID",
+            "summarizeBy": "none"
           },
           {
             "name": "Status",
@@ -2618,7 +2631,8 @@
           {
             "name": "LadderID",
             "dataType": "int64",
-            "sourceColumn": "LadderID"
+            "sourceColumn": "LadderID",
+            "summarizeBy": "none"
           },
           {
             "name": "Site",
@@ -2681,12 +2695,14 @@
           {
             "name": "InspectionID",
             "dataType": "int64",
-            "sourceColumn": "InspectionID"
+            "sourceColumn": "InspectionID",
+            "summarizeBy": "none"
           },
           {
             "name": "LadderID",
             "dataType": "int64",
-            "sourceColumn": "LadderID"
+            "sourceColumn": "LadderID",
+            "summarizeBy": "none"
           },
           {
             "name": "Status",
