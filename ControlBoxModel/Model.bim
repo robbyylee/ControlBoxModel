@@ -594,7 +594,7 @@
             "name": "Services",
             "dataType": "string",
             "isDataTypeInferred": true,
-            "expression": " IF('MOT & Services'[ServiceDue]=1,\"Service Due\",IF('MOT & Services'[ServiceMissed]=1,\"Service Missed\",IF('MOT & Services'[ServiceNotSet]=1,\"Service Not Set\")))"
+            "expression": "IF(LEN('MOT & Services'[daysuntilnextservice])>3,\"Check Service Date\", IF('MOT & Services'[ServiceDue]=1,\"Service Due\",IF('MOT & Services'[ServiceMissed]=1,\"Service Missed\",IF('MOT & Services'[ServiceNotSet]=1,\"Service Not Set\"))))"
           }
         ],
         "partitions": [
