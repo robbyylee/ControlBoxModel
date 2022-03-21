@@ -3292,13 +3292,6 @@
         "toColumn": "SiteCode"
       },
       {
-        "name": "4339f8ba-76e4-45dc-8051-19192c065107",
-        "fromTable": "vVehicleEachDayOfYear",
-        "fromColumn": "Site",
-        "toTable": "tSiteConfig",
-        "toColumn": "SiteCode"
-      },
-      {
         "name": "e5362f76-fab4-495a-bac9-975a5f7b9a2e",
         "fromCardinality": "one",
         "fromTable": "tSiteConfig",
@@ -3322,6 +3315,13 @@
         "toTable": "FI Dim Date",
         "toColumn": "YYYY_MM_DD_slashSep",
         "crossFilteringBehavior": "bothDirections"
+      },
+      {
+        "name": "612dfc99-19a7-4bd4-bba3-717dec955576",
+        "fromTable": "vVehicleEachDayOfYear",
+        "fromColumn": "VRM",
+        "toTable": "tSiteConfig",
+        "toColumn": "SiteCode"
       }
     ],
     "annotations": [
