@@ -817,7 +817,7 @@
             "name": "Site",
             "dataType": "string",
             "isDataTypeInferred": true,
-            "expression": " LOOKUPVALUE(VehicleStats[Site],VehicleStats[Registration],vVehicleEachDayOfYear[VRM])"
+            "expression": " CALCULATE(MAX(VehicleStats[Site]),FILTER(VehicleStats,VehicleStats[Registration]=vVehicleEachDayOfYear[VRM]))"
           },
           {
             "type": "calculated",
