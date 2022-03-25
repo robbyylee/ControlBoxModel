@@ -819,7 +819,7 @@
             "name": "Site",
             "dataType": "string",
             "isDataTypeInferred": true,
-            "expression": " CALCULATE(MAX(VehicleStats[Site]),FILTER(VehicleStats,VehicleStats[Registration]=vVehicleEachDayOfYear[VRM]))"
+            "expression": " LOOKUPVALUE(tVehicleConfig[Site],tVehicleConfig[Registration],vVehicleEachDayOfYear[VRM])"
           },
           {
             "type": "calculated",
@@ -3164,6 +3164,142 @@
             }
           }
         ]
+      },
+      {
+        "name": "tVehicleConfig",
+        "columns": [
+          {
+            "name": "VehicleID",
+            "dataType": "int64",
+            "sourceColumn": "VehicleID"
+          },
+          {
+            "name": "Registration",
+            "dataType": "string",
+            "sourceColumn": "Registration"
+          },
+          {
+            "name": "Route",
+            "dataType": "string",
+            "sourceColumn": "Route"
+          },
+          {
+            "name": "DriverName",
+            "dataType": "string",
+            "sourceColumn": "DriverName"
+          },
+          {
+            "name": "DriverUsername",
+            "dataType": "string",
+            "sourceColumn": "DriverUsername"
+          },
+          {
+            "name": "NextMOT",
+            "dataType": "dateTime",
+            "sourceColumn": "NextMOT"
+          },
+          {
+            "name": "LastMOT",
+            "dataType": "dateTime",
+            "sourceColumn": "LastMOT"
+          },
+          {
+            "name": "LastService",
+            "dataType": "dateTime",
+            "sourceColumn": "LastService"
+          },
+          {
+            "name": "Interval",
+            "dataType": "string",
+            "sourceColumn": "Interval"
+          },
+          {
+            "name": "ServiceMileage",
+            "dataType": "int64",
+            "sourceColumn": "ServiceMileage"
+          },
+          {
+            "name": "CurrentMileage",
+            "dataType": "int64",
+            "sourceColumn": "CurrentMileage"
+          },
+          {
+            "name": "Type",
+            "dataType": "string",
+            "sourceColumn": "Type"
+          },
+          {
+            "name": "Site",
+            "dataType": "string",
+            "sourceColumn": "Site"
+          },
+          {
+            "name": "VOR",
+            "dataType": "string",
+            "sourceColumn": "VOR"
+          },
+          {
+            "name": "NoDriver",
+            "dataType": "string",
+            "sourceColumn": "NoDriver"
+          },
+          {
+            "name": "Added",
+            "dataType": "dateTime",
+            "sourceColumn": "Added"
+          },
+          {
+            "name": "AddedBy",
+            "dataType": "string",
+            "sourceColumn": "AddedBy"
+          },
+          {
+            "name": "LastEdited",
+            "dataType": "dateTime",
+            "sourceColumn": "LastEdited"
+          },
+          {
+            "name": "LastEditedBy",
+            "dataType": "string",
+            "sourceColumn": "LastEditedBy"
+          },
+          {
+            "name": "DaysUntilNextService",
+            "dataType": "string",
+            "sourceColumn": "DaysUntilNextService"
+          },
+          {
+            "name": "DailyMileage",
+            "dataType": "string",
+            "sourceColumn": "DailyMileage"
+          },
+          {
+            "name": "EstimatedDays",
+            "dataType": "string",
+            "sourceColumn": "EstimatedDays"
+          },
+          {
+            "name": "DateFlag",
+            "dataType": "string",
+            "sourceColumn": "DateFlag"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/PPDC1SQL01\\PartsPlus;TF_WebApp_PartsControlBox\",",
+                "    dbo_tVehicleConfig = Source{[Schema=\"dbo\",Item=\"tVehicleConfig\"]}[Data]",
+                "in",
+                "    dbo_tVehicleConfig"
+              ]
+            }
+          }
+        ]
       }
     ],
     "relationships": [
@@ -3319,9 +3455,16 @@
         "crossFilteringBehavior": "bothDirections"
       },
       {
-        "name": "612dfc99-19a7-4bd4-bba3-717dec955576",
+        "name": "58296bb4-31c3-44e3-945f-9df7fa022352",
+        "fromTable": "tVehicleConfig",
+        "fromColumn": "Site",
+        "toTable": "tSiteConfig",
+        "toColumn": "SiteCode"
+      },
+      {
+        "name": "8b35f91d-b0d8-4cc9-9c69-2f7880f882b5",
         "fromTable": "vVehicleEachDayOfYear",
-        "fromColumn": "VRM",
+        "fromColumn": "Site",
         "toTable": "tSiteConfig",
         "toColumn": "SiteCode"
       }
