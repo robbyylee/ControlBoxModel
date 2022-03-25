@@ -16,7 +16,6 @@
           "authentication": null,
           "query": null
         },
-        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
           "kind": "SQL",
@@ -37,7 +36,6 @@
           "authentication": null,
           "query": null
         },
-        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
           "kind": "SQL",
@@ -58,7 +56,6 @@
           "authentication": null,
           "query": null
         },
-        "options": {},
         "credential": {
           "AuthenticationKind": "Windows",
           "kind": "SQL",
@@ -83,23 +80,18 @@
             "sourceColumn": "DriverName"
           },
           {
-            "name": "UserType",
-            "dataType": "string",
-            "sourceColumn": "UserType"
-          },
-          {
             "name": "Available",
-            "dataType": "int64",
+            "dataType": "string",
             "sourceColumn": "Available"
           },
           {
             "name": "Vehicle",
-            "dataType": "int64",
+            "dataType": "string",
             "sourceColumn": "Vehicle"
           },
           {
             "name": "Forklift",
-            "dataType": "int64",
+            "dataType": "string",
             "sourceColumn": "Forklift"
           },
           {
@@ -107,6 +99,16 @@
             "dataType": "int64",
             "sourceColumn": "DriverID",
             "summarizeBy": "none"
+          },
+          {
+            "name": "UserType",
+            "dataType": "string",
+            "sourceColumn": "UserType"
+          },
+          {
+            "name": "EmployeeType",
+            "dataType": "string",
+            "sourceColumn": "EmployeeType"
           }
         ],
         "partitions": [
@@ -117,7 +119,7 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = Sql.Database(\"PPDC1SQL01\\PartsPlus\", \"TF_WebApp_PartsControlBox\", [Query=\"Select DC.DriverID, DC.Site,#(lf)DC.DriverName,#(lf)UC.UserType,#(lf)DC.Available,#(lf)DC.Vehicle,#(lf)DC.Forklift#(lf)from TF_WebApp_PartsControlBox.dbo.tDriverConfig DC#(lf)Left Join TF_WebApp_PartsControlBox.dbo.tUserConfig UC On DC.DriverUsername = UC.Username\"])",
+                "    Source = Sql.Database(\"PPDC1SQL01\\PartsPlus\", \"TF_WebApp_PartsControlBox\", [Query=\"Select DC.DriverID, DC.Site,#(lf)DC.DriverName,#(lf)UC.UserType,#(lf)UC.EmployeeType,#(lf)DC.Available,#(lf)DC.Vehicle,#(lf)DC.Forklift#(lf)from TF_WebApp_PartsControlBox.dbo.tDriverConfig DC#(lf)Left Join TF_WebApp_PartsControlBox.dbo.tUserConfig UC On DC.DriverUsername = UC.Username\"])",
                 "in",
                 "    Source"
               ]
@@ -139,7 +141,7 @@
           },
           {
             "name": "Temps",
-            "expression": " if(isblank(COUNTROWS(FILTER(DriverStats,DriverStats[UserType]=\"Temp\"))),0,COUNTROWS(FILTER(DriverStats,DriverStats[UserType]=\"Temp\")))"
+            "expression": " if(isblank(COUNTROWS(FILTER(DriverStats,DriverStats[EmployeeType]=\"Temporary\"))),0,COUNTROWS(FILTER(DriverStats,DriverStats[EmployeeType]=\"Temporary\")))"
           },
           {
             "name": "VanAccess",
